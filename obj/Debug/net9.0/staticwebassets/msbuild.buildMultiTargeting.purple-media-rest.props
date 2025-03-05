@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/purple-media-rest.props" />
+</Project>
