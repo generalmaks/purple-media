@@ -8,14 +8,17 @@ public class Post
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int PostId { get; set; }
-    [Required, StringLength(255)]
-    public string Title { get; set; }
     [Required]
-    public string Content { get; set; }
+    public string Content { get; set; } = "";
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    [Required]
+    public int UserId { get; set; }
+    [ForeignKey(nameof(UserId))]
     public User? User { get; set; }
     [Required]
-    [ForeignKey("User")]
-    public int UserId { get; set; }
+    public List<Comment> Comments { get; set; } = [];
+    public int CommentsCount { get; set; } = 0;
+    public List<User> LikedBy { get; set; } = [];
+    public int Likes { get; set; } = 0;
 }

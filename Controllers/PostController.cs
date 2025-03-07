@@ -10,43 +10,53 @@ public class PostController(ApplicationDbContext context) : ControllerBase
 {
     // GET: api/Posts
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Post>>> GetPosts([FromQuery] bool sortByDate = true)
+    public async Task<ActionResult<IEnumerable<object>>> GetPosts([FromQuery] bool sortByDate = true)
     {
-        var posts = await context.Posts
-        .Include(p => p.User)  // Joins the User table
-        .OrderByDescending(p => p.CreatedAt)
-        .Select(p => new
-        {
-            p.PostId,
-            p.Title,
-            p.Content,
-            p.CreatedAt,
-            Username = p.User.Username  // Get the username from the User table
-        })
-        .ToListAsync();
+        var query = context.Posts
+            .Include(p => p.User)
+            .Include(p => p.Comments)
+            .Include(p => p.LikedBy)
+            .Select(p => new
+            {
+                p.PostId,
+                p.Content,
+                p.CreatedAt,
+                p.User.Username,
+                p.CommentsCount,
+                p.Likes
+            });
 
+        if (sortByDate)
+            query = query.OrderByDescending(p => p.CreatedAt);
+
+        var posts = await query.ToListAsync();
         return Ok(posts);
     }
 
     // GET: api/Posts/5
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Post>> GetPost(int id)
+    public async Task<ActionResult<object>> GetPost(int id)
     {
-        return await context.Posts
-        .Include(p => p.User)
-        .Where(p => p.PostId == id)
-        .Select(p => new Post
-        {
-            PostId = p.PostId,
-            Title = p.Title,
-            Content = p.Content,
-            User = new User
+        var post = await context.Posts
+            .Include(p => p.User)
+            .Include(p => p.Comments)
+            .Include(p => p.LikedBy)
+            .Where(p => p.PostId == id)
+            .Select(p => new
             {
-                UserId = p.User.UserId,
-                Username = p.User.Username
-            }
-        })
-        .FirstOrDefaultAsync() ?? throw new InvalidOperationException();
+                p.PostId,
+                p.Content,
+                p.CreatedAt,
+                p.User.Username,
+                p.CommentsCount,
+                p.Likes
+            })
+            .FirstOrDefaultAsync();
+
+        if (post == null)
+            return NotFound();
+
+        return Ok(post);
     }
 
     [HttpGet("GetByUsername/{username}")]
@@ -54,15 +64,19 @@ public class PostController(ApplicationDbContext context) : ControllerBase
     {
         var posts = await context.Posts
         .Include(p => p.User)
+        .Include(p => p.Comments)
+        .Include(p => p.LikedBy)
         .Where(p => p.User.Username == username)
         .Select(p => new
         {
             p.PostId,
-            p.Title,
             p.Content,
             p.CreatedAt,
-            Username = p.User.Username
+            p.User.Username,
+            p.CommentsCount,
+            p.Likes
         })
+        .OrderByDescending(p => p.CreatedAt)
         .ToListAsync();
 
         return Ok(posts);
