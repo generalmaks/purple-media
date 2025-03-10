@@ -3,7 +3,6 @@ import './App.css'
 import NavigationBar from './components/NavigationBar'
 import { useState, useEffect } from 'react'
 import Post from './components/Post';
-import React from 'react';
 
 function App() {
     const navigationButtons = [
