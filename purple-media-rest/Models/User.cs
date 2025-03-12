@@ -16,6 +16,8 @@ public class User
     
     [Required]
     public string Username { get; set; } = string.Empty;
+    [Required]
+    public string ProfilePicturePath { get; set; } = string.Empty;
     
     [Required]
     public string PasswordHash { get; set; } = string.Empty;

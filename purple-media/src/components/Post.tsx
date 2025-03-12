@@ -28,7 +28,7 @@ const Post: React.FC<PostProps> = ({ postId, content, createdAt, username, pfp, 
                     content: comment.content,
                     createdAt: new Date(comment.createdAt),
                     username: comment.username,
-                    pfp: '/src/assets/react.svg', // Update image path if needed
+                    pfp: '/src/assets/pfps/' + comment.profilePicturePath, // Update image path if needed
                     likes: comment.likes,
                     commentsCount: comment.commentsCount,
                 })));

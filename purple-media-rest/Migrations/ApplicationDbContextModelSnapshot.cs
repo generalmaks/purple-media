@@ -106,6 +106,10 @@ namespace purple_media_rest.Migrations
                     b.Property<int?>("PostId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ProfilePicturePath")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("varchar(255)");

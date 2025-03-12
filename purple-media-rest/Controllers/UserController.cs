@@ -31,8 +31,14 @@ public class UserController(ApplicationDbContext context) : ControllerBase
 
     // POST: api/Users
     [HttpPost]
-    public async Task<ActionResult<User>> PostUser(User user)
+    public async Task<ActionResult<User>> PostUser(UserCreateDTO userDto)
     {
+        var user = new User
+        {
+            Username = userDto.Username,
+            PasswordHash = userDto.Password,
+            Email = userDto.Email
+        };
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
@@ -83,5 +89,42 @@ public class UserController(ApplicationDbContext context) : ControllerBase
         await context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    // PUT: api/Users/5/ProfilePicture
+    [HttpPut("{id}/ProfilePicture")]
+    public async Task<IActionResult> UpdateProfilePicture(int id, string profilePicturePath)
+    {
+        var user = await context.Users.FindAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        user.ProfilePicturePath = profilePicturePath;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!context.Users.Any(e => e.UserId == id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        return NoContent();
+    }
+    public class UserCreateDTO
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
     }
 }

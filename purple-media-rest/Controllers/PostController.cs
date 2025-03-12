@@ -22,6 +22,7 @@ public class PostController(ApplicationDbContext context) : ControllerBase
                 p.Content,
                 p.CreatedAt,
                 p.User.Username,
+                p.User.ProfilePicturePath,
                 p.CommentsCount,
                 p.Likes
             });

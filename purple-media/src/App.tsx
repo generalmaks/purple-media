@@ -10,6 +10,11 @@ function App() {
         { label: "🤝 Friends", url: "/friends" },
         { label: "⚙️ Settings", url: "/settings" },
     ];
+    const userButtons = [
+        { label: "Profile", url: "/profile" },
+        { label: "Register", url: "/register" },
+        { label: "Login", url: "/login" },
+    ]
 
     // Define Post type
     type PostType = {
@@ -41,7 +46,7 @@ function App() {
                     content: post.content,
                     createdAt: new Date(post.createdAt), // Convert to Date object
                     username: post.username, 
-                    pfp: '/src/assets/react.svg', // Update image path if needed
+                    pfp: '/src/assets/pfps/' + post.profilePicturePath, // Update image path if needed
                     likes: post.likes,
                     commentsCount: post.commentsCount,
                 }));
@@ -79,7 +84,7 @@ function App() {
                 </div>
 
                 {/* Right Navigation bar */}
-                <NavigationBar navigationButtons={navigationButtons} />
+                <NavigationBar navigationButtons={userButtons} />
             </div>
         </div>
     );
