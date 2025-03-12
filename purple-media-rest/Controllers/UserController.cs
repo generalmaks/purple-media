@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using purple_media_rest.Models;
@@ -5,6 +6,7 @@ using purple_media_rest.Models;
 namespace purple_media_rest.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class UserController(ApplicationDbContext context) : ControllerBase
 {
@@ -75,7 +77,7 @@ public class UserController(ApplicationDbContext context) : ControllerBase
         return NoContent();
     }
 
-    // DELETE: api/Users/5
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(int id)
     {
@@ -121,10 +123,4 @@ public class UserController(ApplicationDbContext context) : ControllerBase
 
         return NoContent();
     }
-    public class UserCreateDTO
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-    }
-}
+}    
