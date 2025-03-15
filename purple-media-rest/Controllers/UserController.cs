@@ -6,7 +6,6 @@ using purple_media_rest.Models;
 namespace purple_media_rest.Controllers;
 
 [ApiController]
-[Authorize]
 [Route("api/[controller]")]
 public class UserController(ApplicationDbContext context) : ControllerBase
 {

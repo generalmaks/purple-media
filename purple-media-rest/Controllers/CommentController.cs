@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using purple_media_rest;
@@ -9,6 +10,7 @@ using purple_media_rest.Models;
 
 [ApiController]
 [Route("api/[controller]")]
+
 public class CommentController(ApplicationDbContext context) : ControllerBase
 {
     private readonly ApplicationDbContext _context = context;
@@ -55,6 +57,7 @@ public class CommentController(ApplicationDbContext context) : ControllerBase
     }
 
     // POST: api/Comment
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<CommentDTO>> CreateComment(CreateCommentDTO createCommentDTO)
     {

@@ -13,7 +13,7 @@ function App() {
     const userButtons = [
         { label: "Profile", url: "/profile" },
         { label: "Register", url: "/register" },
-        { label: "Login", url: "/login" },
+        { label: "Login", url: "/login" }
     ]
 
     // Define Post type
@@ -84,7 +84,7 @@ function App() {
                 </div>
 
                 {/* Right Navigation bar */}
-                <NavigationBar navigationButtons={userButtons} />
+                <NavigationBar navigationButtons={userButtons}>Sex</NavigationBar>
             </div>
         </div>
     );

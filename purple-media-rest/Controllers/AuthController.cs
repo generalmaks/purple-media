@@ -70,7 +70,7 @@ namespace PurpleMediaRest.Controllers
                 return null;
             }
 
-            return GenerateJwtToken(userCreateDTO);
+            return GenerateJwtToken(user);
         }
 
         private async Task<IdentityResult> RegisterUserAsync(UserCreateDTO userCreateDTO)
@@ -87,22 +87,26 @@ namespace PurpleMediaRest.Controllers
         }
 
         [HttpGet("token")]
-        public string GenerateJwtToken(UserCreateDTO userCreateDTO)
+        private string GenerateJwtToken(User user) // Changed to take User instead of UserCreateDTO
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var claims = new[]
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, userCreateDTO.Username)
-                }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
             };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _config["Jwt:Issuer"],    // "http://localhost:5173"
+                audience: _config["Jwt:Audience"], // "http://localhost:5173"
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 

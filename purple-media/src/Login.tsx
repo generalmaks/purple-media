@@ -50,6 +50,10 @@ const Login: React.FC = () => {
         }
     }
 
+    function logOut(): void {
+        localStorage.removeItem('token')
+    }
+
     return (
         <div className='space-y-6' style={{ textAlign: 'center', marginTop: '50px' }}>
         <h1 className='text-5xl m-15'>Login to your account</h1>
@@ -87,6 +91,7 @@ const Login: React.FC = () => {
         </form>
         <p>Don't have an account? <Link to="/register" className='p-1 border-2 rounded-lg'>Register</Link></p>
         <Link className='p-1 border-3 rounded-lg' to="/">Go back to the main page</Link>
+        <button className='p-1 border-3 rounded-lg m-2' onClick={logOut}>Lougout</button>
     </div>
     );
 };

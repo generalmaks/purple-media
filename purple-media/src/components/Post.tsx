@@ -9,10 +9,47 @@ type PostProps = {
     pfp: string,
     commentsCount: number,
     likes: number
-  };
+};
+
+
+
 
 const Post: React.FC<PostProps> = ({ postId, content, createdAt, username, pfp, commentsCount, likes }) => {
     const [comments, setComments] = useState<CommentProps[]>([]);
+    const [commentText, setCommentText] = useState<string>('')
+    const [error, setError] = useState<string>('')
+
+    const handleCommentPost = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const comment = {
+            postId: postId,
+            content: commentText,
+            authorId: 106
+        }
+        try {
+            const response = await fetch('http://localhost:5101/api/Comment', {
+                method: 'Post',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+                },
+                body: JSON.stringify(comment)
+            })
+            console.log(localStorage.getItem('token'))
+            if(!response.ok){
+                const errorData = await response.json();
+                console.log(JSON.stringify(comment))
+                alert('Error: ' + errorData)
+            }
+        } catch (error) {
+            
+        }
+    }
+
+    const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setCommentText(e.target.value)
+    }
+
     useEffect(() => {
         fetch(`http://localhost:5101/api/Comment/ByPost/${postId}`)
             .then(response => {
@@ -50,6 +87,17 @@ const Post: React.FC<PostProps> = ({ postId, content, createdAt, username, pfp, 
                     <p className="text-lg">Likes: {likes}</p>
                     <p className="text-lg">Comments: {commentsCount}</p>
                 </div>
+                <form onSubmit={handleCommentPost}>
+                    <input
+                        name="comment"
+                        value={commentText}
+                        onChange={handleCommentChange}
+                        className='p-2 border-3 rounded-lg w-64'
+                        type='text'
+                        placeholder='Comment text'
+                    />
+                    <button type='submit' className="p-2 border-2 m-2">Post comment</button>
+                </form>
                 {comments.map((comment) => (
                     <Comment
                         commentId={comment.commentId}
