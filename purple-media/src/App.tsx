@@ -84,7 +84,7 @@ function App() {
                 </div>
 
                 {/* Right Navigation bar */}
-                <NavigationBar navigationButtons={userButtons}>Sex</NavigationBar>
+                <NavigationBar navigationButtons={userButtons}/>
             </div>
         </div>
     );

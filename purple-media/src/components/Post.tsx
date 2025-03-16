@@ -36,6 +36,9 @@ const Post: React.FC<PostProps> = ({ postId, content, createdAt, username, pfp, 
                 body: JSON.stringify(comment)
             })
             console.log(localStorage.getItem('token'))
+            const token = localStorage.getItem('token')
+            if(!token)
+                alert('You are unauthorized to make comment. Login or register to make comments')
             if(!response.ok){
                 const errorData = await response.json();
                 console.log(JSON.stringify(comment))
