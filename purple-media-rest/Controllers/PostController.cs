@@ -13,18 +13,15 @@ public class PostController(ApplicationDbContext context) : ControllerBase
     public async Task<ActionResult<IEnumerable<object>>> GetPosts([FromQuery] bool sortByDate = true)
     {
         var query = context.Posts
-            .Include(p => p.User)
-            .Include(p => p.Comments)
+            .Include(p => p.Author)
             .Include(p => p.LikedBy)
             .Select(p => new
             {
                 p.PostId,
                 p.Content,
                 p.CreatedAt,
-                p.User.Username,
-                p.User.ProfilePicturePath,
-                p.CommentsCount,
-                p.Likes
+                p.Author.Username,
+                p.Author.ProfilePicturePath,
             });
 
         if (sortByDate)
@@ -39,8 +36,7 @@ public class PostController(ApplicationDbContext context) : ControllerBase
     public async Task<ActionResult<object>> GetPost(int id)
     {
         var post = await context.Posts
-            .Include(p => p.User)
-            .Include(p => p.Comments)
+            .Include(p => p.Author)
             .Include(p => p.LikedBy)
             .Where(p => p.PostId == id)
             .Select(p => new
@@ -48,9 +44,7 @@ public class PostController(ApplicationDbContext context) : ControllerBase
                 p.PostId,
                 p.Content,
                 p.CreatedAt,
-                p.User.Username,
-                p.CommentsCount,
-                p.Likes
+                p.Author.Username,
             })
             .FirstOrDefaultAsync();
 
@@ -64,18 +58,15 @@ public class PostController(ApplicationDbContext context) : ControllerBase
     public async Task<ActionResult<IEnumerable<Post>>> GetPostsByUsername(string username)
     {
         var posts = await context.Posts
-        .Include(p => p.User)
-        .Include(p => p.Comments)
+        .Include(p => p.Author)
         .Include(p => p.LikedBy)
-        .Where(p => p.User.Username == username)
+        .Where(p => p.Author.Username == username)
         .Select(p => new
         {
             p.PostId,
             p.Content,
             p.CreatedAt,
-            p.User.Username,
-            p.CommentsCount,
-            p.Likes
+            p.Author.Username,
         })
         .OrderByDescending(p => p.CreatedAt)
         .ToListAsync();
@@ -90,7 +81,7 @@ public class PostController(ApplicationDbContext context) : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var user = await context.Users.FindAsync(post.UserId);
+        var user = await context.Users.FindAsync(post.AuthorId);
         if (user == null)
             return BadRequest("User not found.");
 

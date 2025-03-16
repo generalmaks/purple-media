@@ -63,7 +63,7 @@ namespace PurpleMediaRest.Controllers
         private async Task<string> AuthenticateUserAsync(UserCreateDTO userCreateDTO)
         {
             var user = await Task.Run(() => _context.Users.SingleOrDefault(
-                u => u.Username == userCreateDTO.Username && u.PasswordHash == userCreateDTO.Password));
+                u => u.Username == userCreateDTO.Username && u.Password == userCreateDTO.Password));
             
             if (user == null)
             {
@@ -78,7 +78,7 @@ namespace PurpleMediaRest.Controllers
             var user = new User
             {
                 Username = userCreateDTO.Username,
-                PasswordHash = userCreateDTO.Password // Note: In a real application, you should hash the password before storing it
+                Password = userCreateDTO.Password // Note: In a real application, you should hash the password before storing it
             };
 
             await _context.Users.AddAsync(user);
@@ -91,7 +91,7 @@ namespace PurpleMediaRest.Controllers
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Username),
                 new Claim(ClaimTypes.Name, user.Username)
             };
 

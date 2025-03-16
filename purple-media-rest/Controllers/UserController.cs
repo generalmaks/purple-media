@@ -17,10 +17,10 @@ public class UserController(ApplicationDbContext context) : ControllerBase
     }
 
     // GET: api/Users/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUser(int id)
+    [HttpGet("{username}")]
+    public async Task<ActionResult<User>> GetUser(string username)
     {
-        var user = await context.Users.FindAsync(id);
+        var user = await context.Users.FindAsync(username);
 
         if (user == null)
         {
@@ -37,20 +37,20 @@ public class UserController(ApplicationDbContext context) : ControllerBase
         var user = new User
         {
             Username = userDto.Username,
-            PasswordHash = userDto.Password,
+            Password = userDto.Password,
             Email = userDto.Email
         };
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
+        return CreatedAtAction(nameof(GetUser), new { username = user }, user);
     }
 
     // PUT: api/Users/5
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutUser(int id, User user)
+    [HttpPut("{username}")]
+    public async Task<IActionResult> PutUser(string username, User user)
     {
-        if (id != user.UserId)
+        if (username != user.Username)
         {
             return BadRequest();
         }
@@ -63,7 +63,7 @@ public class UserController(ApplicationDbContext context) : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!context.Users.Any(e => e.UserId == id))
+            if (!context.Users.Any(e => e.Username == username))
             {
                 return NotFound();
             }
@@ -77,10 +77,10 @@ public class UserController(ApplicationDbContext context) : ControllerBase
     }
 
     [Authorize]
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser(int id)
+    [HttpDelete("{username}")]
+    public async Task<IActionResult> DeleteUser(string username)
     {
-        var user = await context.Users.FindAsync(id);
+        var user = await context.Users.FindAsync(username);
         if (user == null)
         {
             return NotFound();
@@ -93,10 +93,10 @@ public class UserController(ApplicationDbContext context) : ControllerBase
     }
 
     // PUT: api/Users/5/ProfilePicture
-    [HttpPut("{id}/ProfilePicture")]
-    public async Task<IActionResult> UpdateProfilePicture(int id, string profilePicturePath)
+    [HttpPut("{username}/ProfilePicture")]
+    public async Task<IActionResult> UpdateProfilePicture(string username, string profilePicturePath)
     {
-        var user = await context.Users.FindAsync(id);
+        var user = await context.Users.FindAsync(username);
         if (user == null)
         {
             return NotFound();
@@ -110,7 +110,7 @@ public class UserController(ApplicationDbContext context) : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!context.Users.Any(e => e.UserId == id))
+            if (!context.Users.Any(e => e.Username == username))
             {
                 return NotFound();
             }

@@ -7,20 +7,23 @@ namespace purple_media_rest.Models;
 public class User
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int UserId { get; set; }
-    
+    [Column(TypeName = "varchar(50)")]
+    public string Username { get; set; } = "";
     [Required]
+    [Column(TypeName = "varchar(100)")]
     [EmailAddress]
-    public string Email { get; set; } = string.Empty;
+    public string Email { get; set; } = "";
+    [Required]
+    [Column(TypeName = "varchar(255)")]
+    public string Password { get; set; } = "";
+    [Column(TypeName = "varchar(255)")]
+    public string? ProfilePicturePath { get; set; } = string.Empty;
+    [Column(TypeName = "tinyint")]
+    public byte IsAdmin { get; set; } = 0;
     
-    [Required]
-    public string Username { get; set; } = string.Empty;
-    [Required]
-    public string ProfilePicturePath { get; set; } = string.Empty;
-    
-    [Required]
-    public string PasswordHash { get; set; } = string.Empty;
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public List<Post> Posts { get; set; } = [];
+    public List<Post> LikedPosts { get; set; } = [];
 }
