@@ -1,0 +1,22 @@
+<div class="tweet-feed">
+  <div *ngIf="tweets.length === 0">Loading tweets...</div>
+  <div *ngFor="let tweet of tweets">
+    <div class="tweet">
+      <div class="pfp-and-username">
+        <img
+          *ngIf="tweet.profilePicturePath != ''"
+          src="{tweet.profilePicturePath}"
+          alt="PFP"
+        />
+        <h3>{{ tweet.author }}</h3>
+      </div>
+      <p>{{ tweet.content }}</p>
+      <p>{{ tweet.createdAt | date : "medium" }}</p>
+      <div class="response-info">
+        <p>❤️: {{ tweet.likedBy.length }}</p>
+        <p></p>
+        <p>💬: {{ tweet.responses.length }}</p>
+      </div>
+    </div>
+  </div>
+</div>

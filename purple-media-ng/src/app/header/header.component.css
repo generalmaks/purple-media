@@ -1,0 +1,15 @@
+.app-header{
+    text-align: center;
+    background-color: purple;
+}
+.pageHeader{
+    padding-top: 5px;
+}
+.navigationButtons{
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+.navigationButton{
+    background-color: pink;
+    margin: 10px;
+}

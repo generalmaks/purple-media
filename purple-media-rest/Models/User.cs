@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
+using purple_media_rest.DTO;
 
 namespace purple_media_rest.Models;
 
@@ -26,4 +27,13 @@ public class User
 
     public List<Post> Posts { get; set; } = [];
     public List<Post> LikedPosts { get; set; } = [];
+
+    public GetUserDTO getUserDTO(){
+        var userDto = new GetUserDTO{
+            Username = this.Username,
+            ProfilePicturePath = this.ProfilePicturePath,
+            CreatedAt = this.CreatedAt
+        };
+        return userDto;
+    }
 }

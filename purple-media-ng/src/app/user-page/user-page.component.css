@@ -1,0 +1,10 @@
+.user-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pfp-and-info {
+    display: flex;
+    flex-direction: row;
+}

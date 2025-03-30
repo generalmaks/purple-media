@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using purple_media_rest.Models;
+using purple_media_rest.DTO;
 
 namespace purple_media_rest.Controllers;
 
@@ -11,14 +12,25 @@ public class UserController(ApplicationDbContext context) : ControllerBase
 {
     // GET: api/Users
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<GetUserDTO>>> GetUsers()
     {
-        return await context.Users.ToListAsync();
+        var users = await context.Users.ToListAsync();
+        var usersDto = new List<GetUserDTO>(); 
+        foreach (var user in users)
+        {
+            var userDto = new GetUserDTO{
+                Username = user.Username,
+                ProfilePicturePath = user.ProfilePicturePath,
+                CreatedAt = user.CreatedAt
+            };
+            usersDto.Add(userDto);
+        }
+        return Ok(usersDto);
     }
 
-    // GET: api/Users/5
+    // GET: api/Users/username
     [HttpGet("{username}")]
-    public async Task<ActionResult<User>> GetUser(string username)
+    public async Task<ActionResult<GetUserDTO>> GetUser(string username)
     {
         var user = await context.Users.FindAsync(username);
 
@@ -27,7 +39,13 @@ public class UserController(ApplicationDbContext context) : ControllerBase
             return NotFound();
         }
 
-        return user;
+        var userDto = new GetUserDTO{
+            Username = user.Username,
+            ProfilePicturePath = user.ProfilePicturePath,
+            CreatedAt = user.CreatedAt
+        };
+
+        return userDto;
     }
 
     // POST: api/Users

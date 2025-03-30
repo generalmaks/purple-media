@@ -1,0 +1,10 @@
+<div class="user-page">
+  <div class="pfp-and-info">
+    <img src="{user.profilePicturePath}" alt="PFP" />
+    <div class="user-info">
+      <h1>{{ user.username }}</h1>
+      <p>Joined at: {{ user.createdAt | date : "medium" }}</p>
+    </div>
+  </div>
+  <app-tweet-feed [userId]="userId"></app-tweet-feed>
+</div>
