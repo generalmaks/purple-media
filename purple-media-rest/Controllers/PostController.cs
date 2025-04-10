@@ -148,11 +148,15 @@ public class PostController(ApplicationDbContext context) : ControllerBase
     [HttpPut("likedBy/{id}/{username}")]
     public async Task<ActionResult> LikePost(int id, string username)
     {
-        var post = await context.Posts.FindAsync(id);
+        var post = await context.Posts
+            .Include(p => p.LikedBy) // Make sure to include LikedBy
+            .FirstOrDefaultAsync(p => p.PostId == id);
+
         if (post == null)
         {
             return NotFound("Post was not found");
         }
+
         var user = await context.Users.FindAsync(username);
         if (user == null)
         {
@@ -162,16 +166,23 @@ public class PostController(ApplicationDbContext context) : ControllerBase
         var alreadyLiked = post.LikedBy.Any(u => u.Username == username);
         if (alreadyLiked)
         {
-            var userToRemove = post.LikedBy.First(u => u.Username == username);
-            post.LikedBy.Remove(userToRemove);
+            post.LikedBy.Remove(user);
         }
         else
         {
             post.LikedBy.Add(user);
         }
 
-        await context.SaveChangesAsync();
-        return Ok();
+        try
+        {
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+        catch (DbUpdateException ex)
+        {
+            // Log the error
+            return StatusCode(500, "An error occurred while updating the database");
+        }
     }
 
     // GET: api/responses/{id}
