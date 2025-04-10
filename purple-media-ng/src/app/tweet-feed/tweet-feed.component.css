@@ -1,46 +1,5 @@
 .tweet-feed {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.tweet {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 90%;
-    max-width: 500px;
-    min-width: 300px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    margin: 10px;
-    background-color: #fff;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.pfp-and-username {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
-
-/* Username styling */
-.pfp-and-username h3 {
-    margin: 0;
-    font-size: 1.2em;
-}
-
-/* Tweet content styling */
-.tweet p {
-    margin: 5px 0;
-    font-size: 1em;
-    color: #333;
-}
-
-.response-info {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 20px;
 }

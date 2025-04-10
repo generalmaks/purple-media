@@ -1,17 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { environment } from '../../environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
-  private apiUrl = environment.apiUrl + '/User/'
+export class LikesService {
+  private apiUrl = environment.apiUrl + '/Post/likedBy';
 
   constructor(private http: HttpClient) { }
 
-  getTweets(id: string): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl + id)
+  likePost(id: number, username: string) {
+    return this.http.put<any>(this.apiUrl + `/${id}/${username}`, {})
   }
 }

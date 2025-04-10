@@ -158,7 +158,17 @@ public class PostController(ApplicationDbContext context) : ControllerBase
         {
             return NotFound("User was not found");
         }
-        post.LikedBy.Add(user);
+
+        var alreadyLiked = post.LikedBy.Any(u => u.Username == username);
+        if (alreadyLiked)
+        {
+            var userToRemove = post.LikedBy.First(u => u.Username == username);
+            post.LikedBy.Remove(userToRemove);
+        }
+        else
+        {
+            post.LikedBy.Add(user);
+        }
 
         await context.SaveChangesAsync();
         return Ok();

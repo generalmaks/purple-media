@@ -1,0 +1,18 @@
+<div class="tweet">
+  <div class="pfp-and-username">
+    <img
+      *ngIf="tweet?.profilePicturePath"
+      [src]="tweet.profilePicturePath"
+      alt="PFP"
+    />
+    <h3>{{ tweet?.author }}</h3>
+  </div>
+  <p>{{ tweet?.content }}</p>
+  <p>{{ tweet?.createdAt | date : "medium" }}</p>
+  <div class="response-info">
+    <button (click)="handleLike()">
+      ❤️: {{ tweet?.likedBy?.length || 0 }}
+    </button>
+    <button>💬: {{ tweet?.responses?.length || 0 }}</button>
+  </div>
+</div>

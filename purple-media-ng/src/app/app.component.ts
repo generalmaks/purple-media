@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { TweetFeedComponent } from "./tweet-feed/tweet-feed.component";
+import { SidebarComponent } from "./sidebar/sidebar.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, TweetFeedComponent],
+  imports: [RouterOutlet, HeaderComponent, TweetFeedComponent, SidebarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

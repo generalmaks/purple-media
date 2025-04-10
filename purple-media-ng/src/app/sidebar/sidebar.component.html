@@ -1,0 +1,8 @@
+<div class="sidebar">
+  <h3>Sidebar</h3>
+  <ul *ngFor="let button of buttons">
+    <button class="sidebar-button" (click)="Clicked(button)">
+      {{ button.text }}
+    </button>
+  </ul>
+</div>

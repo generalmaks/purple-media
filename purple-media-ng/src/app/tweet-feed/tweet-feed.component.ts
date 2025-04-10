@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { TweetService } from '../services/tweet.service';
-import { DatePipe } from '@angular/common';
+import { TweetComponent } from "../tweet/tweet.component";
 
 @Component({
   selector: 'app-tweet-feed',
   standalone: true,
-  imports: [NgIf, NgFor, DatePipe],
+  imports: [NgIf, NgFor, TweetComponent],
   templateUrl: './tweet-feed.component.html',
   styleUrl: './tweet-feed.component.css'
 })
@@ -16,6 +16,10 @@ export class TweetFeedComponent implements OnInit {
   constructor(private tweetService: TweetService) { }
 
   ngOnInit(): void {
+    this.loadTweets()
+  }
+
+  loadTweets() {
     if (this.userId) {
       this.tweetService.getTweetsByUser(this.userId).subscribe(
         (tweets) => {

@@ -1,0 +1,35 @@
+button {
+    background-color: #6a0dad;
+    /* Purple background */
+    color: white;
+    /* White text */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #8a2be2;
+    /* Lighter purple on hover */
+    transform: scale(1.05);
+    /* Slightly enlarge on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    transform: scale(0.95);
+    /* Slightly shrink on click */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button-container {
+    display: flex;
+    justify-content: flex-end;
+    /* Align buttons to the right */
+    margin-top: 20px;
+}

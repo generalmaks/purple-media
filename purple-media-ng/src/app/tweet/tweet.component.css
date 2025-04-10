@@ -1,0 +1,30 @@
+button:hover {
+    transform: scale(1.05);
+}
+
+.tweet {
+    border: 3px solid #1DA1F2;
+    /* Twitter's brand blue color */
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+    background-color: #f7f9fa;
+    /* Light Twitter-like background */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #0F1419;
+    /* Twitter's dark text color */
+}
+
+.tweet:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    border-color: #198CD8;
+    /* Slightly darker blue on hover */
+}
+
+.tweet:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
