@@ -5,7 +5,6 @@ namespace purple_media_rest;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    // Add the User model to the database context
     public DbSet<User> Users { get; set; }
     public DbSet<Post> Posts { get; set; }
 
@@ -34,11 +33,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasMany(p => p.LikedBy)
             .WithMany(u => u.LikedPosts)
             .UsingEntity(j => j.ToTable("PostLikes"));
-
-        // Optional: Set default value for CreationDate
-        modelBuilder.Entity<Post>()
-            .Property(p => p.CreatedAt)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
         base.OnModelCreating(modelBuilder);
     }

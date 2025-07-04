@@ -9,14 +9,12 @@ public class Post
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int PostId { get; set; }
-    [Required]
-    [Column(TypeName = "text")]
+    [Required, Column(TypeName = "text")]
     public string Content { get; set; } = "";
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     
-    [Required]
-    [Column(TypeName = "varchar(50)")]
+    [Required, Column(TypeName = "varchar(50)")]
     public string AuthorId { get; set; } = "";
     [ForeignKey(nameof(AuthorId))]
     public User? Author { get; set; }

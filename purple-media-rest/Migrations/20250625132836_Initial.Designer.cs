@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using purple_media_rest;
@@ -12,18 +11,14 @@ using purple_media_rest;
 namespace purple_media_rest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250316190442_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250625132836_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
 
             modelBuilder.Entity("PostUser", b =>
                 {
@@ -31,7 +26,7 @@ namespace purple_media_rest.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<int>("LikedPostsPostId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("LikedByUsername", "LikedPostsPostId");
 
@@ -44,9 +39,7 @@ namespace purple_media_rest.Migrations
                 {
                     b.Property<int>("PostId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("PostId"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("AuthorId")
                         .IsRequired()
@@ -57,9 +50,7 @@ namespace purple_media_rest.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("ParentPostId")
                         .HasColumnType("int");
@@ -79,13 +70,13 @@ namespace purple_media_rest.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
-                    b.Property<sbyte>("IsAdmin")
+                    b.Property<byte>("IsAdmin")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Password")

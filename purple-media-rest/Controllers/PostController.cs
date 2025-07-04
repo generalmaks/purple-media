@@ -84,7 +84,7 @@ public class PostController(ApplicationDbContext context) : ControllerBase
     }
 
     // PUT: api/Posts/5
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> PutPost(int id, Post post)
     {
         if (id != post.PostId)
@@ -114,7 +114,7 @@ public class PostController(ApplicationDbContext context) : ControllerBase
     }
 
     // DELETE: api/Posts/5
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeletePost(int id)
     {
         var post = await context.Posts.FindAsync(id);
@@ -130,7 +130,7 @@ public class PostController(ApplicationDbContext context) : ControllerBase
     }
 
     // GET: api/likedBy
-    [HttpGet("likedBy/{id}")]
+    [HttpGet("likedBy/{id:int}")]
     public async Task<ActionResult<IEnumerable<string>>> GetLikedBy(int id)
     {
         var post = await context.Posts
@@ -145,7 +145,7 @@ public class PostController(ApplicationDbContext context) : ControllerBase
     }
 
     // Put: api/likedBy/{id}
-    [HttpPut("likedBy/{id}/{username}")]
+    [HttpPut("likedBy/{id:int}/{username}")]
     public async Task<ActionResult> LikePost(int id, string username)
     {
         var post = await context.Posts
@@ -186,7 +186,7 @@ public class PostController(ApplicationDbContext context) : ControllerBase
     }
 
     // GET: api/responses/{id}
-    [HttpGet("responses/{id}")]
+    [HttpGet("responses/{id:int}")]
     public async Task<ActionResult<Post>> GetResponses(int id)
     {
         var post = await context.Posts
