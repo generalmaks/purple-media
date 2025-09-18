@@ -12,6 +12,7 @@ public class UserController(ApplicationDbContext context) : ControllerBase
 {
     // GET: api/Users
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<GetUserDTO>>> GetUsers()
     {
         var users = await context.Users.ToListAsync();
