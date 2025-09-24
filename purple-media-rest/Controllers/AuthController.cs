@@ -21,8 +21,9 @@ public class AuthController(IConfiguration config, ApplicationDbContext context)
     if(users.Any(u => u.Username == request.Username))
       return BadRequest("Username already exists");
     
-    users.Add(new User { Username = request.Username, Password = request.Password });
-    return Ok("User created");
+    context.Users.Add(new User { Username = request.Username, Password = request.Password, Email = request.Email });
+    await context.SaveChangesAsync();
+    return Ok(new {message = "User created"});
   }
 
   [HttpPost("login")]
