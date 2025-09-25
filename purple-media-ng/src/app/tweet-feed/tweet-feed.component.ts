@@ -2,17 +2,18 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { TweetService } from '../services/tweet.service';
 import { TweetComponent } from "../tweet/tweet.component";
+import { ComposerComponent } from "../composer/composer.component";
 
 @Component({
   selector: 'app-tweet-feed',
   standalone: true,
-  imports: [NgIf, NgFor, TweetComponent],
+  imports: [NgIf, NgFor, TweetComponent, ComposerComponent],
   templateUrl: './tweet-feed.component.html',
   styleUrl: './tweet-feed.component.css'
 })
 export class TweetFeedComponent implements OnInit {
   @Input() userId: string | null = null
-  tweets: any[] = []
+  tweets: TweetComponent[] = []
   constructor(private tweetService: TweetService) { }
 
   ngOnInit(): void {

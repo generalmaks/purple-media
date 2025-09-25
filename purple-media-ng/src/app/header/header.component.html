@@ -16,5 +16,6 @@
       target="_blank"
       >Linkedin</a
     >
+    <button class="navigationButton" (click)="onLoginLogout()">{{ authService.isLoggedIn() ? 'Logout' : 'Login' }}</button>
   </div>
 </div>

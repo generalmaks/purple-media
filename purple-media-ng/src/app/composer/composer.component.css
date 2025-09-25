@@ -1,0 +1,50 @@
+:host {
+  --bg: #1a002b;
+  --card: rgba(26,0,43,0.8);
+  --muted: #ffb3ec;
+  --accent: #ff71ce;
+  --accent2: #01cdfe;
+  --accent3: #05ffa1;
+  --max-width: 1100px;
+  --radius: 4px;
+  font-family: 'Press Start 2P', monospace;
+}
+
+.composer {
+  background: var(--card);
+  padding: 12px;
+  border: 2px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  box-shadow: 0 0 10px var(--accent3);
+}
+.composer #actions {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+.btn {
+  padding: 8px 12px;
+  border: 2px solid var(--accent2);
+  background: var(--accent);
+  color: black;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.composer #pfp-and-text textarea {
+  flex: 1;
+  min-height: 64px;
+  border: 2px solid var(--accent2);
+  padding: 10px;
+  background: black;
+  color: var(--accent3);
+  font-family: inherit;
+  font-size: 10px;
+  resize: none;
+  overflow: hidden;
+  width: auto;
+}

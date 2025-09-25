@@ -1,0 +1,11 @@
+<div class="composer">
+  <div id="pfp-and-text">
+    <img id="pfp" alt="PFP">
+    <textarea [(ngModel)]="postContent" placeholder="What's on your mind>"></textarea>
+  </div>
+  <div id="actions">
+    <button class="btn" id="attachments">FILES</button>
+    <button class="btn" id="visibility" (click)="onChangeVisibility()">{{ this.visibility }}</button>
+    <button class="btn" id="post" (click)="onPost()">POST</button>
+  </div>
+</div>
