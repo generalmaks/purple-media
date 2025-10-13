@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using purple_media_rest;
+using purple_media_rest.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,6 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Purple Media API", Version = "v1" });
 
-    // 🔑 Add JWT Bearer Auth
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -75,6 +75,9 @@ builder.Services.AddCors(options =>
                           policy.AllowCredentials();
                       });
 });
+
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<PostRepository>();
 
 var app = builder.Build();
 

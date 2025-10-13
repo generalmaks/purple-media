@@ -1,144 +1,88 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using purple_media_rest.Models;
 using purple_media_rest.DTO;
+using purple_media_rest.Repositories;
 
 namespace purple_media_rest.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UserController(ApplicationDbContext context) : ControllerBase
+public class UserController(UserRepository userRepository) : ControllerBase
 {
     // GET: api/Users
     [HttpGet]
     [Authorize]
     public async Task<ActionResult<IEnumerable<GetUserDTO>>> GetUsers()
     {
-        var users = await context.Users.ToListAsync();
-        var usersDto = new List<GetUserDTO>(); 
-        foreach (var user in users)
+        try
         {
-            var userDto = new GetUserDTO{
-                Username = user.Username,
-                ProfilePicturePath = user.ProfilePicturePath,
-                CreatedAt = user.CreatedAt
-            };
-            usersDto.Add(userDto);
+            var users = await userRepository.GetAllUsers();
+            return Ok(users);
         }
-        return Ok(usersDto);
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     // GET: api/Users/username
     [HttpGet("{username}")]
     public async Task<ActionResult<GetUserDTO>> GetUser(string username)
     {
-        var user = await context.Users.FindAsync(username);
-
-        if (user == null)
+        try
         {
-            return NotFound();
+            var user = await userRepository.GetUser(username);
+            return Ok(user);
         }
-
-        var userDto = new GetUserDTO{
-            Username = user.Username,
-            ProfilePicturePath = user.ProfilePicturePath,
-            CreatedAt = user.CreatedAt
-        };
-
-        return userDto;
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     // POST: api/Users
     [HttpPost]
     public async Task<ActionResult<User>> PostUser(UserCreateDTO userDto)
     {
-        var user = new User
-        {
-            Username = userDto.Username,
-            Password = userDto.Password,
-            Email = userDto.Email
-        };
-        context.Users.Add(user);
-        await context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetUser), new { username = user }, user);
-    }
-
-    // PUT: api/Users/5
-    [HttpPut("{username}")]
-    public async Task<IActionResult> PutUser(string username, User user)
-    {
-        if (username != user.Username)
-        {
-            return BadRequest();
-        }
-
-        context.Entry(user).State = EntityState.Modified;
-
         try
         {
-            await context.SaveChangesAsync();
+            await userRepository.PostUser(userDto);
+            return Ok("User created");
         }
-        catch (DbUpdateConcurrencyException)
+        catch (Exception e)
         {
-            if (!context.Users.Any(e => e.Username == username))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
+            return BadRequest(e.Message);
         }
-
-        return NoContent();
     }
 
     [Authorize]
     [HttpDelete("{username}")]
     public async Task<IActionResult> DeleteUser(string username)
     {
-        var user = await context.Users.FindAsync(username);
-        if (user == null)
+        try
         {
-            return NotFound();
+            await userRepository.DeleteUser(username);
+            return Ok("User deleted");
         }
-
-        context.Users.Remove(user);
-        await context.SaveChangesAsync();
-
-        return NoContent();
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     // PUT: api/Users/5/ProfilePicture
     [HttpPut("{username}/ProfilePicture")]
     public async Task<IActionResult> UpdateProfilePicture(string username, string profilePicturePath)
     {
-        var user = await context.Users.FindAsync(username);
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        user.ProfilePicturePath = profilePicturePath;
-
         try
         {
-            await context.SaveChangesAsync();
+            await userRepository.UpdateProfilePicture(username, profilePicturePath);
+            return Ok("Profile picture updated");
         }
-        catch (DbUpdateConcurrencyException)
+        catch (Exception e)
         {
-            if (!context.Users.Any(e => e.Username == username))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
+            return BadRequest(e.Message);
         }
-
-        return NoContent();
     }
 }    
