@@ -1,36 +1,57 @@
-button:hover {
-    transform: scale(1.05);
-}
-
 .tweet {
-    border: 3px solid #1DA1F2;
-    /* Twitter's brand blue color */
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 15px;
-    background-color: #f7f9fa;
-    /* Light Twitter-like background */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    color: #0F1419;
-    /* Twitter's dark text color */
+  background: rgba(20, 20, 30, 0.9);
+  border: 2px solid #ff77ff;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 6px;
+  box-shadow: 0 0 5px #ff77ff, 0 0 15px #7700ff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.tweet:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    border-color: #198CD8;
-    /* Slightly darker blue on hover */
+.tweet::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.03) 3px
+  );
+  animation: scanline 6s linear infinite;
+  pointer-events: none;
 }
 
-.tweet:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.tweet .pfp-and-username h3 {
+  color: #ffccff;
+  text-shadow: 0 0 5px #ff77ff, 0 0 10px #00ffff;
 }
 
-#content {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  white-space: pre-wrap;
+@keyframes scanline {
+  0% {
+    top: -100%;
+  }
+  100% {
+    top: 0%;
+  }
+}
+
+.response-info button {
+  background: none;
+  border: none;
+  color: #ffccff;
+  font-family: "Press Start 2P", monospace;
+  cursor: pointer;
+  text-shadow: 0 0 4px #ff77ff, 0 0 8px #00ffff;
+  transition: transform 0.2s ease;
+}
+
+.response-info button:hover {
+  transform: scale(1.2);
+  color: #00ffff;
+  text-shadow: 0 0 6px #00ffff, 0 0 12px #ff77ff;
 }

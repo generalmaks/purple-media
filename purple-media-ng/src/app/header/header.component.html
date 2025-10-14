@@ -1,21 +1,11 @@
 <div class="app-header">
-  <h1 class="pageHeader">Purple media</h1>
-  <div class="navigationButtons">
-    <a
-      class="navigationButton"
-      href="http://instagram.com/general_maks1"
-      target="_blank"
-      >Instagram</a
-    >
-    <a class="navigationButton" href="http://t.me/general_maks" target="_blank">
-      Telegram</a
-    >
-    <a
-      class="navigationButton"
-      href="http://www.linkedin.com/in/maksym-zinets-ba1330318"
-      target="_blank"
-      >Linkedin</a
-    >
-    <button class="navigationButton" (click)="onLoginLogout()">{{ authService.isLoggedIn() ? 'Logout' : 'Login' }}</button>
+  <img id="logo" alt="LOGO">
+  <div id="search">
+    <button id="cancelSearch">❌</button>
+    <input [(ngModel)]="searchQuery" id="searchBar" type="search" placeholder="Type to search...">
+    <button id="searchButton" (click)="search()">🔍</button>
+  </div>
+  <div id="login-controls">
+    <button class="button" (click)="onLoginLogout()">{{ this.authService.isLoggedIn() ? "Logout" : "Login"}}</button>
   </div>
 </div>

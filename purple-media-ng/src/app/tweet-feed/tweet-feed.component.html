@@ -1,6 +1,4 @@
-
 <div class="tweet-feed">
-  <app-composer></app-composer>
   <div *ngIf="tweets.length === 0">Loading tweets...</div>
   <div *ngFor="let tweet of tweets">
     <app-tweet [tweet]="tweet"></app-tweet>

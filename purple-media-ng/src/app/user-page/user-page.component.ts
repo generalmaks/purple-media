@@ -8,7 +8,7 @@ import { TweetService } from '../services/tweet.service';
 @Component({
   selector: 'app-user-page',
   standalone: true,
-  imports: [DatePipe, TweetFeedComponent],
+  imports: [DatePipe],
   templateUrl: './user-page.component.html',
   styleUrl: './user-page.component.css'
 })
@@ -23,7 +23,6 @@ export class UserPageComponent implements OnInit {
     this.userId = this.route.snapshot.paramMap.get("id")
     if (this.userId) {
       this.loadUserData(this.userId)
-
     }
   }
 

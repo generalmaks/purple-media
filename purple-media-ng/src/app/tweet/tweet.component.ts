@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { LikesService } from '../services/likes.service';
-import { DatePipe, NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-tweet',
   standalone: true,
-  imports: [DatePipe, NgIf],
+  imports: [CommonModule, NgIf],
   templateUrl: './tweet.component.html',
   styleUrl: './tweet.component.css'
 })

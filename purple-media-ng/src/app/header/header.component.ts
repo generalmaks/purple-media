@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import {AuthService} from "../services/auth.service";
+import { FormsModule } from '@angular/forms'
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+  searchQuery: string = ''
   constructor(public authService: AuthService, private router: Router) { }
 
   onLoginLogout() {
@@ -18,6 +20,12 @@ export class HeaderComponent {
       this.router.navigate(['/'])
     } else {
       this.router.navigate(['/login'])
+    }
+  }
+
+  search() {
+    if(this.searchQuery.trim().length > 0){
+      this.router.navigate(['/search', this.searchQuery.trim()]);
     }
   }
 }

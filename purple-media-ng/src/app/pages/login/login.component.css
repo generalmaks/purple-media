@@ -54,10 +54,6 @@
   transition: background 0.2s;
 }
 
-#toLogin {
-  margin-top: 5px;
-}
-
 #loginForm button:hover {
   background: #357ab7;
 }
