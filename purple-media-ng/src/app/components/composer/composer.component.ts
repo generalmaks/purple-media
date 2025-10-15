@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms'
@@ -20,6 +20,8 @@ const Visibility: string[] = [
 export class ComposerComponent {
   visibility: string = 'PUBLIC';
   postContent: string = ''
+  @Input() isInResponse: boolean = false;
+  @Input() responseTweetId: number = 0;
 
   constructor(private authService: AuthService, private router: Router, private tweetService: TweetService) {
   }
@@ -37,11 +39,11 @@ export class ComposerComponent {
       let postData = {
         authorId: this.authService.getUsername(),
         content: this.postContent,
-        parentPostId: null
+        parentPostId: this.isInResponse ? this.responseTweetId : null
       }
       this.tweetService.postTweet(postData).subscribe({
         next: res => {
-          console.log("Successfully posted")
+          console.log(res)
           this.postContent = '';
           window.location.reload();
         },

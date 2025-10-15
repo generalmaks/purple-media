@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { LikesService } from '../../services/likes.service';
 import { CommonModule, NgIf } from '@angular/common';
 import {AuthService} from "../../services/auth.service";
 import { ActivatedRoute, Router } from '@angular/router'
+import {TweetService} from "../../services/tweet.service";
 
 @Component({
   selector: 'app-tweet',
@@ -11,15 +12,20 @@ import { ActivatedRoute, Router } from '@angular/router'
   templateUrl: './tweet.component.html',
   styleUrl: './tweet.component.css'
 })
-export class TweetComponent {
+export class TweetComponent implements OnChanges{
   @Input() tweet: any
 
   constructor(
     private likeService: LikesService,
     private authService: AuthService,
     private actRouter: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private tweetService: TweetService) {
+  }
 
+  ngOnChanges() {
+    this.getLikesAmount()
+    this.getResponsesAmount()
   }
   handleLike() {
     if (!this.tweet || !this.tweet.postId) return;
@@ -52,5 +58,23 @@ export class TweetComponent {
   toUserPage() {
     if (this.tweet.author)
     this.router.navigate(['/user/', this.tweet.author]);
+  }
+
+  getLikesAmount() {
+    this.likeService.getLikes(this.tweet.postId).subscribe({
+      next: res => {
+        this.tweet.likedBy = res;
+      }, error: (err) => {
+        console.error('Error fetching likes:', err)
+      }
+    })
+  }
+
+  getResponsesAmount() {
+    this.tweetService.getResponsesToTweet(this.tweet.postId).subscribe({
+      next: res => {
+        this.tweet.responses = res;
+      }
+    })
   }
 }

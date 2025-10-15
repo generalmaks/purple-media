@@ -4,6 +4,7 @@ import {Tweet} from "../../interfaces/tweet";
 import {TweetService} from "../../services/tweet.service";
 import {ActivatedRoute} from '@angular/router'
 import { CommonModule } from '@angular/common'
+import {ComposerComponent} from "../../components/composer/composer.component";
 
 @Component({
   selector: 'app-tweet-responses',
@@ -11,32 +12,31 @@ import { CommonModule } from '@angular/common'
   imports: [
     TweetComponent,
     CommonModule,
+    ComposerComponent,
   ],
   templateUrl: './tweet-responses.component.html',
   styleUrl: './tweet-responses.component.css'
 })
 export class TweetResponsesComponent {
-    @Input() mainTweet!: Tweet;
-    @Input() responses: Tweet[] = [];
+    mainTweet!: Tweet;
+    responses: Tweet[] = [];
 
     constructor(
       private tweetService: TweetService,
       private actRoute: ActivatedRoute,) {}
 
-    ngOnInit() {
-      this.loadMainTweet()
-      this.loadResponseTweets()
-    }
-
-    loadMainTweet() {
-      let thisTweetIdUrl = this.actRoute.snapshot.paramMap.get("tweetId")
-      if (!thisTweetIdUrl) {
-        alert('Tweet not found')
-        return
+  ngOnInit() {
+    this.actRoute.paramMap.subscribe(params => {
+      const tweetId = params.get('tweetId');
+      if (tweetId) {
+        this.loadMainTweet(tweetId);
+        this.loadResponseTweets(tweetId);
       }
-      let thisTweetId = thisTweetIdUrl;
+    });
+  }
 
-      this.tweetService.getTweetsById(thisTweetId).subscribe({
+    loadMainTweet(tweetIdUrl: string) {
+      this.tweetService.getTweetsById(tweetIdUrl).subscribe({
         next: res => {
           this.mainTweet = res;
         },
@@ -47,21 +47,24 @@ export class TweetResponsesComponent {
       });
     }
 
-  loadResponseTweets() {
-    let thisTweetIdUrl = this.actRoute.snapshot.paramMap.get("tweetId")
-    if (!thisTweetIdUrl) {
-      alert('Tweet not found')
-      return
-    }
-    let thisTweetId = thisTweetIdUrl;
-
-    this.tweetService.getResponsesToTweet(thisTweetId).subscribe({
+  loadResponseTweets(tweetIdUrl: string) {
+    this.tweetService.getResponsesToTweet(tweetIdUrl).subscribe({
       next: res => {
-        this.responses = res;
+        this.responses = this.sortByDateAndEngagement(res)
       }, error: (err) => {
         console.error('Error loading tweet:', err);
         alert('Failed to load tweet');
       }
     })
   }
+
+  sortByDateAndEngagement(tweets: Tweet[]): Tweet[] {
+    return tweets.sort((a: Tweet, b: Tweet) => {
+      const engagementDiff = (b.likedBy.length + b.responses.length) - (a.likedBy.length + a.responses.length);
+      if (engagementDiff !== 0) return engagementDiff;
+
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+  }
+
 }

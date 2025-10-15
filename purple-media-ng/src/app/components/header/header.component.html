@@ -16,6 +16,7 @@
   </form>
 
   <nav id="login-controls" aria-label="User actions">
+    <p> {{ authService.isLoggedIn() ? this.authService.getUsername() : "Not logged in" }}</p>
     <button class="button" (click)="onLoginLogout()">
       {{ authService.isLoggedIn() ? "Logout" : "Login" }}
     </button>

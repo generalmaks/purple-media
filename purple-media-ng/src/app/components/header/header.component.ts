@@ -28,7 +28,6 @@ export class HeaderComponent {
       this.router.navigate(['/search', this.searchQuery.trim()]);
     }
   }
-
   toMainPage(){
     this.searchQuery = ''
     this.router.navigate(['/'])

@@ -22,4 +22,8 @@ export class LoginComponent {
       error: err => alert(err.error || 'Login failed')
     });
   }
+
+  toRegister() {
+    this.router.navigate(['/register'])
+  }
 }

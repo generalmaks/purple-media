@@ -25,4 +25,8 @@ export class RegisterComponent {
         alert(err.error.toString() || 'Registration failed')}
     });
   }
+
+  toLogin() {
+    this.router.navigate(['/login']);
+  }
 }
