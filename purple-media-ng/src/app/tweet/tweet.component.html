@@ -1,18 +1,26 @@
-<div class="tweet">
-  <div class="pfp-and-username">
-    <img
-      *ngIf="tweet?.profilePicturePath"
-      [src]="tweet.profilePicturePath"
-      alt="PFP"
-    />
-    <h3>{{ tweet?.author }}</h3>
-  </div>
-  <p id="content">{{ tweet?.content }}</p>
-  <p>{{ tweet?.createdAt | date : "medium" }}</p>
-  <div class="response-info">
-    <button (click)="handleLike()">
-      ❤️: {{ tweet?.likedBy?.length || 0 }}
-    </button>
-    <button>💬: {{ tweet?.responses?.length || 0 }}</button>
-  </div>
-</div>
+<article class="tweet">
+  <header class="tweet-header">
+    <a (click)="toUserPage()" class="author-link">
+      <img
+        id="profile-picture"
+        [src]="tweet.profilePicturePath"
+        alt="{{ tweet?.author }}'s profile picture"
+      />
+      <h3>{{ tweet?.author }}</h3>
+    </a>
+  </header>
+
+  <section class="tweet-content">
+    <p>{{ tweet?.content }}</p>
+  </section>
+
+  <footer class="tweet-footer">
+    <time [attr.datetime]="tweet?.createdAt">
+      {{ tweet?.createdAt | date : "medium" }}
+    </time>
+    <nav class="response-info" aria-label="Tweet actions">
+      <button (click)="handleLike()">❤️ {{ tweet?.likedBy?.length || 0 }}</button>
+      <button (click)="openResponses()">💬 {{ tweet?.responses?.length || 0 }}</button>
+    </nav>
+  </footer>
+</article>

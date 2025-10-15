@@ -8,7 +8,7 @@ import { TweetService } from '../services/tweet.service';
 @Component({
   selector: 'app-user-page',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, TweetFeedComponent],
   templateUrl: './user-page.component.html',
   styleUrl: './user-page.component.css'
 })
@@ -28,14 +28,23 @@ export class UserPageComponent implements OnInit {
 
   loadUserData(userId: string | null) {
     if (userId) {
-      this.userService.getTweets(userId).subscribe(
-        (data) => {
-          this.user = data
+      this.tweetService.getTweetsByUser(userId).subscribe(
+        (res) => {
+          this.userTweets = res
         },
         (error) => {
           console.error(error)
+          return
         }
       )
+      this.userService.getUserPublicInfo(userId).subscribe(
+        (res) => {
+          this.user = res
+        },
+        err => {
+          console.error('Error with fetching user data: ' + err)
+          return
+      })
     }
   }
 }

@@ -10,6 +10,7 @@ import {Tweet} from "../interfaces/tweet";
   standalone: true,
   imports: [
     ComposerComponent,
+    TweetFeedComponent,
   ],
   templateUrl: './main-tweet-feed.component.html',
   styleUrl: './main-tweet-feed.component.css'

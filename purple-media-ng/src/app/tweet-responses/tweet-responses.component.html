@@ -1,0 +1,5 @@
+<app-tweet [tweet]="mainTweet"></app-tweet>
+<div *ngIf="responses.length === 0">Loading responses...</div>
+<div *ngFor="let response of responses">
+  <app-tweet [tweet]="response"></app-tweet>
+</div>

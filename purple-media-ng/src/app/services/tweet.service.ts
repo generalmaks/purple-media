@@ -28,4 +28,12 @@ export class TweetService {
   postTweet(post: any){
     return this.http.post<Tweet>(this.apiUrl, post)
   }
+
+  getTweetsById(id: string) {
+    return this.http.get<Tweet>(this.apiUrl + '/' + id);
+  }
+
+  getResponsesToTweet(id: string) {
+    return this.http.get<Tweet[]>(this.apiUrl + '/responses/' + id);
+  }
 }

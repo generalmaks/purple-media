@@ -12,12 +12,9 @@ import {Tweet} from "../interfaces/tweet";
   templateUrl: './tweet-feed.component.html',
   styleUrl: './tweet-feed.component.css'
 })
-export class TweetFeedComponent implements OnChanges {
+export class TweetFeedComponent {
   @Input() userId: string | null = null
   @Input() tweets: Tweet[] = []
   constructor(private tweetService: TweetService) { }
 
-  ngOnChanges(): void {
-
-  }
 }

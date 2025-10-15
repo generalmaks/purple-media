@@ -6,15 +6,15 @@ import { environment } from '../../environment';
   providedIn: 'root'
 })
 export class LikesService {
-  private apiUrl = environment.apiUrl + '/Post/likedBy';
+  private apiUrl = environment.apiUrl + '/Post';
 
   constructor(private http: HttpClient) { }
 
   likePost(id: number, username: string) {
-    return this.http.put<any>(this.apiUrl + `/${id}/${username}`, {})
+    return this.http.put<any>(this.apiUrl + `/LikePost/${id}/${username}`, {})
   }
 
   getLikes(id: number) {
-    return this.http.get<any>(this.apiUrl + `/${id}`, {})
+    return this.http.get<any>(this.apiUrl + `/likedBy/${id}`, {})
   }
 }

@@ -1,8 +1,16 @@
-<div class="sidebar">
-  <h3>Sidebar</h3>
-  <ul *ngFor="let button of buttons">
-    <button class="sidebar-button" (click)="Clicked(button)">
-      {{ button.text }}
-    </button>
-  </ul>
-</div>
+<aside class="sidebar" aria-label="Sidebar navigation">
+  <h2 class="sidebar-title">Sidebar</h2>
+  <nav>
+    <ul>
+      <li *ngFor="let button of buttons">
+        <button
+          class="sidebar-button"
+          type="button"
+          (click)="Clicked(button)"
+        >
+          {{ button.text }}
+        </button>
+      </li>
+    </ul>
+  </nav>
+</aside>

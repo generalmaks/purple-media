@@ -1,35 +1,43 @@
-button {
-    background-color: #6a0dad;
-    /* Purple background */
-    color: white;
-    /* White text */
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.sidebar {
+  max-width: 200px;
+  margin: 20px auto;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f9f9f9;
+  text-align: center;
 }
 
-button:hover {
-    background-color: #8a2be2;
-    /* Lighter purple on hover */
-    transform: scale(1.05);
-    /* Slightly enlarge on hover */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+.sidebar-title {
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: #333;
 }
 
-button:active {
-    transform: scale(0.95);
-    /* Slightly shrink on click */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-button-container {
-    display: flex;
-    justify-content: flex-end;
-    /* Align buttons to the right */
-    margin-top: 20px;
+.sidebar nav li {
+  margin-bottom: 8px;
+}
+
+.sidebar-button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar-button:hover {
+  background: #0077ff;
+  color: white;
+  transform: scale(1.05);
 }

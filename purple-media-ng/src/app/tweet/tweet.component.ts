@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { LikesService } from '../services/likes.service';
 import { CommonModule, NgIf } from '@angular/common';
 import {AuthService} from "../services/auth.service";
+import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
   selector: 'app-tweet',
@@ -13,7 +14,11 @@ import {AuthService} from "../services/auth.service";
 export class TweetComponent {
   @Input() tweet: any
 
-  constructor(private likeService: LikesService, private authService: AuthService) {
+  constructor(
+    private likeService: LikesService,
+    private authService: AuthService,
+    private actRouter: ActivatedRoute,
+    private router: Router) {
 
   }
   handleLike() {
@@ -22,6 +27,7 @@ export class TweetComponent {
     let currentUser = this.authService.getUsername()
     if (!currentUser) {
       console.error('You are not logged in!')
+      this.router.navigate(['/login'])
       return;
     }
     currentUser = String(currentUser)
@@ -37,5 +43,14 @@ export class TweetComponent {
       },
       error: (err) => console.error('Error liking tweet:', err)
     });
+  }
+
+  openResponses(): void{
+    this.router.navigate(['/tweet/', this.tweet.postId]);
+  }
+
+  toUserPage() {
+    if (this.tweet.author)
+    this.router.navigate(['/user/', this.tweet.author]);
   }
 }

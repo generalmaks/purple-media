@@ -1,11 +1,23 @@
-<div class="app-header">
-  <img id="logo" alt="LOGO">
-  <div id="search">
-    <button id="cancelSearch">❌</button>
-    <input [(ngModel)]="searchQuery" id="searchBar" type="search" placeholder="Type to search...">
-    <button id="searchButton" (click)="search()">🔍</button>
-  </div>
-  <div id="login-controls">
-    <button class="button" (click)="onLoginLogout()">{{ this.authService.isLoggedIn() ? "Logout" : "Login"}}</button>
-  </div>
-</div>
+<header class="app-header">
+  <a (click)="toMainPage()" class="logo-link" aria-label="Home">
+    <img id="logo" alt="App Logo" />
+  </a>
+
+  <form class="search-form" (ngSubmit)="search()" role="search" aria-label="Site search">
+    <label for="searchBar" class="visually-hidden">Search</label>
+    <input
+      id="searchBar"
+      [(ngModel)]="searchQuery"
+      name="searchQuery"
+      type="search"
+      placeholder="Type to search..."
+    />
+    <button type="submit" id="searchButton">🔍</button>
+  </form>
+
+  <nav id="login-controls" aria-label="User actions">
+    <button class="button" (click)="onLoginLogout()">
+      {{ authService.isLoggedIn() ? "Logout" : "Login" }}
+    </button>
+  </nav>
+</header>

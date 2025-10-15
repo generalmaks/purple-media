@@ -11,7 +11,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getTweets(id: string): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl + id)
+  getUserPublicInfo(id: string) {
+    return this.http.get(`${this.apiUrl}${id}`)
   }
 }
