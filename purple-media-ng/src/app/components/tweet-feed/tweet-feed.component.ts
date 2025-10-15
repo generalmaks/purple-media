@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { TweetService } from '../services/tweet.service';
+import { TweetService } from '../../services/tweet.service';
 import { TweetComponent } from "../tweet/tweet.component";
 import { ComposerComponent } from "../composer/composer.component";
-import {Tweet} from "../interfaces/tweet";
+import {Tweet} from "../../interfaces/tweet";
 
 @Component({
   selector: 'app-tweet-feed',

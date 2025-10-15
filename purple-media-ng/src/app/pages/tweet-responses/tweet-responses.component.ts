@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import {TweetComponent} from "../tweet/tweet.component";
-import {Tweet} from "../interfaces/tweet";
-import {TweetService} from "../services/tweet.service";
+import {TweetComponent} from "../../components/tweet/tweet.component";
+import {Tweet} from "../../interfaces/tweet";
+import {TweetService} from "../../services/tweet.service";
 import {ActivatedRoute} from '@angular/router'
 import { CommonModule } from '@angular/common'
 

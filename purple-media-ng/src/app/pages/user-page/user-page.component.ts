@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { TweetFeedComponent } from "../tweet-feed/tweet-feed.component";
+import { TweetFeedComponent } from "../../components/tweet-feed/tweet-feed.component";
 import { ActivatedRoute } from '@angular/router';
-import { UserService } from '../services/user.service';
+import { UserService } from '../../services/user.service';
 import { DatePipe, NgFor } from '@angular/common';
-import { TweetService } from '../services/tweet.service';
+import { TweetService } from '../../services/tweet.service';
 
 @Component({
   selector: 'app-user-page',

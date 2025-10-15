@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { LikesService } from '../services/likes.service';
+import { LikesService } from '../../services/likes.service';
 import { CommonModule, NgIf } from '@angular/common';
-import {AuthService} from "../services/auth.service";
+import {AuthService} from "../../services/auth.service";
 import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({

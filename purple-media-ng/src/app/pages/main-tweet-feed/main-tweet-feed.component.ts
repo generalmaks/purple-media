@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import {ComposerComponent} from "../composer/composer.component";
-import {TweetFeedComponent} from "../tweet-feed/tweet-feed.component";
-import {TweetService} from "../services/tweet.service";
-import {TweetComponent} from "../tweet/tweet.component";
-import {Tweet} from "../interfaces/tweet";
+import {ComposerComponent} from "../../components/composer/composer.component";
+import {TweetFeedComponent} from "../../components/tweet-feed/tweet-feed.component";
+import {TweetService} from "../../services/tweet.service";
+import {TweetComponent} from "../../components/tweet/tweet.component";
+import {Tweet} from "../../interfaces/tweet";
 
 @Component({
   selector: 'app-main-tweet-feed',
