@@ -14,7 +14,7 @@ export class TweetService {
   constructor(private http: HttpClient) { }
 
   getTweets(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl)
+    return this.http.get<Tweet[]>(this.apiUrl)
   }
 
   getTweetsByUser(userId: string) {

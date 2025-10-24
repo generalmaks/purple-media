@@ -1,6 +1,6 @@
 <main class="user-page">
   <header class="profile-header">
-    <img src="{user.profilePicturePath}" alt="PFP" />
+    <img [src]="profilePictureUrl" alt="PFP" />
     <div class="user-info">
       <h1>{{ user.username }}</h1>
       <p>Joined at: {{ user.createdAt | date : "medium" }}</p>

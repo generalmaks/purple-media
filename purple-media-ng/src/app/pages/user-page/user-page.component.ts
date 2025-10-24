@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { TweetFeedComponent } from "../../components/tweet-feed/tweet-feed.component";
-import { ActivatedRoute } from '@angular/router';
-import { UserService } from '../../services/user.service';
-import { DatePipe, NgFor } from '@angular/common';
-import { TweetService } from '../../services/tweet.service';
+import {Component, OnInit} from '@angular/core';
+import {TweetFeedComponent} from "../../components/tweet-feed/tweet-feed.component";
+import {ActivatedRoute} from '@angular/router';
+import {UserService} from '../../services/user.service';
+import {DatePipe, NgFor} from '@angular/common';
+import {TweetService} from '../../services/tweet.service';
+import {FileServiceService} from "../../services/file-service.service";
 
 @Component({
   selector: 'app-user-page',
@@ -16,8 +17,13 @@ export class UserPageComponent implements OnInit {
   userId: string | null = ''
   user: any
   userTweets: any[] = []
+  profilePictureUrl?: string
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private tweetService: TweetService) { }
+  constructor(private route: ActivatedRoute,
+              private userService: UserService,
+              private tweetService: TweetService,
+              private fileService: FileServiceService) {
+  }
 
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get("id")
@@ -27,24 +33,35 @@ export class UserPageComponent implements OnInit {
   }
 
   loadUserData(userId: string | null) {
-    if (userId) {
-      this.tweetService.getTweetsByUser(userId).subscribe(
-        (res) => {
-          this.userTweets = res
-        },
-        (error) => {
-          console.error(error)
-          return
-        }
-      )
-      this.userService.getUserPublicInfo(userId).subscribe(
-        (res) => {
-          this.user = res
-        },
-        err => {
-          console.error('Error with fetching user data: ' + err)
-          return
-      })
-    }
+    if (!userId) return;
+
+    console.log("Getting tweets");
+    this.tweetService.getTweetsByUser(userId).subscribe(
+      res => {
+        this.userTweets = res.map(tweet => ({
+          ...tweet,
+          authorsProfilePictureId: this.user?.profilePictureId
+        }));
+      },
+      err => console.error(err)
+    );
+
+    console.log("Gettings user data")
+    this.userService.getUserPublicInfo(userId).subscribe(res => {
+      this.user = res;
+
+      const pfpId = this.user?.profilePictureId;
+
+      if (pfpId) {
+        this.fileService.getFile(pfpId).subscribe({
+          next: (blob: Blob) => {
+            this.profilePictureUrl = URL.createObjectURL(blob);
+          },
+          error: err => console.error('Error loading profile picture:', err)
+        });
+      } else {
+        console.warn('No profile picture ID found for user ', this.user);
+      }
+    });
   }
 }
