@@ -3,7 +3,7 @@ export interface Tweet {
   content: string;
   createdAt: string;
   author: string;
-  authorProfilePicturePath: string;
+  authorsProfilePictureId: number;
   parentPost: number;
   responses: number[];
   likedBy: string[];

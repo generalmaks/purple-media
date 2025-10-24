@@ -1,6 +1,8 @@
 .sidebar {
   max-width: 200px;
-  margin: 20px auto;
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-bottom: 8px;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
