@@ -73,11 +73,11 @@ public class UserController(UserRepository userRepository) : ControllerBase
 
     // PUT: api/Users/5/ProfilePicture
     [HttpPut("{username}/ProfilePicture")]
-    public async Task<IActionResult> UpdateProfilePicture(string username, string profilePicturePath)
+    public async Task<IActionResult> UpdateProfilePicture(string username, int profilePictureId)
     {
         try
         {
-            await userRepository.UpdateProfilePicture(username, profilePicturePath);
+            await userRepository.UpdateProfilePicture(username, profilePictureId);
             return Ok("Profile picture updated");
         }
         catch (Exception e)

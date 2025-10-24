@@ -20,6 +20,20 @@ public class PostRepository(ApplicationDbContext context)
         return postsDto;
     }
 
+    public async Task<IEnumerable<GetPostDto>> GetAllPostsWithoutParents(bool sortByDate = true)
+    {
+        var posts = await context.Posts
+            .Where(p => p.ParentPost == null)
+            .Include(p => p.LikedBy)
+            .ToListAsync();
+
+        if (sortByDate)
+            posts = posts.OrderByDescending(p => p.CreatedAt).ToList();
+
+        var postsDto = posts.Select(p => p.ToGetPostDto()).ToList();
+        return postsDto;
+    }
+
     public async Task<GetPostDto> GetPost(int id)
     {
         var post = await context.Posts
@@ -108,7 +122,7 @@ public class PostRepository(ApplicationDbContext context)
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<GetPostDto>> GetResponces(int id)
+    public async Task<IEnumerable<GetPostDto>> GetResponses(int id)
     {
         var post = await context.Posts
             .Include(post => post.ChildPosts)

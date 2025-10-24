@@ -13,7 +13,7 @@ public class UserRepository(ApplicationDbContext context)
         return users.Select(user => new GetUserDTO
         {
             Username = user.Username, 
-            ProfilePicturePath = user.ProfilePicturePath, 
+            ProfilePictureId = user.ProfilePictureId,
             CreatedAt = user.CreatedAt
         }).ToList();
     }
@@ -26,7 +26,7 @@ public class UserRepository(ApplicationDbContext context)
             throw new Exception($"User {username} not found.");
         var userDto = new GetUserDTO{
             Username = user.Username,
-            ProfilePicturePath = user.ProfilePicturePath,
+            ProfilePictureId = user.ProfilePictureId,
             CreatedAt = user.CreatedAt
         };
 
@@ -56,13 +56,13 @@ public class UserRepository(ApplicationDbContext context)
         await context.SaveChangesAsync();
     }
     
-    public async Task UpdateProfilePicture(string username, string profilePicturePath)
+    public async Task UpdateProfilePicture(string username, int profilePictureId)
     {
         var user = await context.Users.FindAsync(username);
         if (user == null)
             throw new Exception($"User {username} not found.");
-        
-        user.ProfilePicturePath = profilePicturePath;
+
+        user.ProfilePictureId = profilePictureId;
         await context.SaveChangesAsync();
     }
 }

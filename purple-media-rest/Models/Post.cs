@@ -8,31 +8,32 @@ public class Post
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int PostId { get; set; }
-    [Required, Column(TypeName = "text")]
-    public string Content { get; set; } = "";
+    public int PostId { get; init; }
+    [Required, Column(TypeName = "text"), MaxLength(150)]
+    public string Content { get; init; } = "";
     [Required]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
     
     [Required, Column(TypeName = "varchar(50)")]
-    public string AuthorId { get; set; } = "";
+    public string AuthorId { get; init; } = "";
     [ForeignKey(nameof(AuthorId))]
-    public User? Author { get; set; }
+    public User? Author { get; init; }
     [Column(TypeName = "int")]
-    public int? ParentPostId { get; set; }
+    public int? ParentPostId { get; init; }
 
     [ForeignKey(nameof(ParentPostId))]
-    public Post? ParentPost { get; set; }
+    public Post? ParentPost { get; init; }
 
-    public List<Post> ChildPosts { get; set; } = [];
-    public List<User> LikedBy { get; set; } = [];
+    public List<Post> ChildPosts { get; init; } = [];
+    public List<User> LikedBy { get; init; } = [];
+    public List<FileAttachment> Attachments { get; init; } = [];
     public GetPostDto ToGetPostDto(){
         var getPostDto = new GetPostDto{
             PostId = this.PostId,
             Content = this.Content,
             CreatedAt = this.CreatedAt,
             Author = this.AuthorId,
-            AuthorProfilePicturePath = this.Author?.ProfilePicturePath,
+            AuthorsProfilePictureId = this.Author?.ProfilePictureId,
             ParentPost = this.ParentPostId,
             Responses = this.ChildPosts.Select(p => p.PostId).ToList(),
             LikedBy = this.LikedBy.Select(l => l.Username).ToList(),

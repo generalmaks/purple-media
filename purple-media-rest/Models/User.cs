@@ -16,8 +16,8 @@ public class User
     [Required]
     [Column(TypeName = "varchar(255)")]
     public string Password { get; init; } = "";
-    [Column(TypeName = "varchar(255)")]
-    public string? ProfilePicturePath { get; set; } = string.Empty;
+
+    public int? ProfilePictureId { get; set; }
     [Column(TypeName = "tinyint")]
     public byte IsAdmin { get; init; } = 0;
     
@@ -29,9 +29,9 @@ public class User
 
     public GetUserDTO GetUserDto(){
         var userDto = new GetUserDTO{
-            Username = this.Username,
-            ProfilePicturePath = this.ProfilePicturePath,
-            CreatedAt = this.CreatedAt
+            Username = Username,
+            ProfilePictureId = ProfilePictureId,
+            CreatedAt = CreatedAt
         };
         return userDto;
     }
