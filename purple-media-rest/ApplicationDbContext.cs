@@ -7,10 +7,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Post> Posts { get; set; }
+    public DbSet<FileAttachment> FileAttachment { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Ensure Email is unique
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
@@ -21,18 +21,19 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasForeignKey(p => p.AuthorId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Post to Post (Self-Referential One-to-Many: Post has one ParentPost)
         modelBuilder.Entity<Post>()
             .HasOne(p => p.ParentPost)
             .WithMany(p => p.ChildPosts)
             .HasForeignKey(p => p.ParentPostId)
-            .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete to avoid cycles
-
-        // User to Post (Many-to-Many: LikedBy/LikedPosts)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         modelBuilder.Entity<Post>()
             .HasMany(p => p.LikedBy)
             .WithMany(u => u.LikedPosts)
             .UsingEntity(j => j.ToTable("PostLikes"));
+
+        modelBuilder.Entity<FileAttachment>()
+            .HasOne(f => f.Owner);
 
         base.OnModelCreating(modelBuilder);
     }

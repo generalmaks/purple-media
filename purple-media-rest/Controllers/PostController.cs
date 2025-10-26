@@ -55,7 +55,7 @@ public class PostController(PostRepository postRepository) : ControllerBase
     }
 
     [HttpGet("GetByUsername/{username}")]
-    public async Task<ActionResult<IEnumerable<Post>>> GetPostsByUsername(string username)
+    public async Task<ActionResult<IEnumerable<GetPostDto>>> GetPostsByUsername(string username)
     {
         try
         {
