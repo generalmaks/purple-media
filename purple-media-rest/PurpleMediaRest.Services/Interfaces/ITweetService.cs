@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace PurpleMediaRest.Services.Interfaces;
 
 public interface ITweetService

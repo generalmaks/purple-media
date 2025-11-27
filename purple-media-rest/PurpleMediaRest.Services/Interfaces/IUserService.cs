@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace PurpleMediaRest.Services.Interfaces;
 
 public interface IUserService
