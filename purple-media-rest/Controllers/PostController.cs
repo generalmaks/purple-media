@@ -75,7 +75,7 @@ public class PostController(PostRepository postRepository) : ControllerBase
         try
         {
             await postRepository.CreatePost(postPostDto);
-            return Ok(new { message = "Post created"});
+            return Ok(new { message = "Tweet created"});
         }
         catch (Exception e)
         {
@@ -90,7 +90,7 @@ public class PostController(PostRepository postRepository) : ControllerBase
         try
         {
             await postRepository.DeletePost(id);
-            return Ok( new { message = "Post has been deleted"});
+            return Ok( new { message = "Tweet has been deleted"});
         }
         catch (Exception e)
         {
@@ -113,14 +113,14 @@ public class PostController(PostRepository postRepository) : ControllerBase
         }
     }
 
-    // Put: api/Post/likedBy/{id}
+    // Put: api/Tweet/likedBy/{id}
     [HttpPut("LikePost/{id:int}/{username}")]
     public async Task<ActionResult> LikePost(int id, string username)
     {
         try
         {
             await postRepository.LikePost(id, username);
-            return Ok(new { message = "Post has been liked/unliked"});
+            return Ok(new { message = "Tweet has been liked/unliked"});
         }
         catch (Exception e)
         {
@@ -128,9 +128,9 @@ public class PostController(PostRepository postRepository) : ControllerBase
         }
     }
 
-    // GET: api/Post/responses/{id}
+    // GET: api/Tweet/responses/{id}
     [HttpGet("responses/{id:int}")]
-    public async Task<ActionResult<Post>> GetResponses(int id)
+    public async Task<ActionResult<Tweet>> GetResponses(int id)
     {
         try
         {
@@ -143,7 +143,7 @@ public class PostController(PostRepository postRepository) : ControllerBase
         }
     }
     
-    // GET: api/Post/findBySnippet
+    // GET: api/Tweet/findBySnippet
     [HttpGet("search/{snippet}")]
     public async Task<ActionResult<List<PostSearchResultDto>>> FindBySnippet(string snippet)
     {
