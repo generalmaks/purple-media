@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using purple_media_rest.PurpleMediaRest.DataAccess.Models;
 using PurpleMediaRest.DataAccess.Enums;
 

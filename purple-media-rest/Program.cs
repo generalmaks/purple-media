@@ -1,12 +1,7 @@
-using System.Configuration;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using purple_media_rest;
-using purple_media_rest.Models;
-using purple_media_rest.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,9 +39,6 @@ builder.Services.AddControllers();
 builder.Services.AddAuthorization();
 builder.Services.AddCors();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite("Data source=app.db"));
-
 
 const string myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -76,10 +68,6 @@ builder.Services.AddCors(options =>
                           policy.AllowCredentials();
                       });
 });
-
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<PostRepository>();
-builder.Services.AddScoped<FileRepository>();
 
 var app = builder.Build();
 

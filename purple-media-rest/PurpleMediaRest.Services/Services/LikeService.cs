@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using purple_media_rest.PurpleMediaRest.DataAccess.Models;
 using PurpleMediaRest.Services.Interfaces;

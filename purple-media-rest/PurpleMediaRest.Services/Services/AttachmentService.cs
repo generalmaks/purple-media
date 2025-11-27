@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using purple_media_rest.PurpleMediaRest.DataAccess.Models;
 using PurpleMediaRest.Services.Interfaces;
 using TwitterClone.Data;

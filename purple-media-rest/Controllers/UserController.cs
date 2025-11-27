@@ -1,38 +1,19 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using purple_media_rest.Models;
-using purple_media_rest.DTO;
-using purple_media_rest.Repositories;
+using PurpleMediaRest.DataAccess.Enums;
+using PurpleMediaRest.Services.Interfaces;
 
 namespace purple_media_rest.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class UserController(UserRepository userRepository) : ControllerBase
+[Route("/api/users")]
+public class UserController(IUserService service) : ControllerBase
 {
-    // GET: api/Users
-    [HttpGet]
-    [Authorize]
-    public async Task<ActionResult<IEnumerable<GetUserDTO>>> GetUsers()
+    [HttpGet("{userId:int}")]
+    public async Task<ActionResult<User?>> GetAsync(int userId)
     {
         try
         {
-            var users = await userRepository.GetAllUsers();
-            return Ok(users);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-
-    // GET: api/Users/username
-    [HttpGet("{username}")]
-    public async Task<ActionResult<GetUserDTO>> GetUser(string username)
-    {
-        try
-        {
-            var user = await userRepository.GetUser(username);
+            var user = await service.GetByIdAsync(userId);
             return Ok(user);
         }
         catch (Exception e)
@@ -41,14 +22,13 @@ public class UserController(UserRepository userRepository) : ControllerBase
         }
     }
 
-    // POST: api/Users
-    [HttpPost]
-    public async Task<ActionResult<User>> PostUser(UserCreateDTO userDto)
+    [HttpGet("by-username/{username}")]
+    public async Task<ActionResult<User?>> GetByUsernameAsync(string username)
     {
         try
         {
-            await userRepository.PostUser(userDto);
-            return Ok("User created");
+            var user = await service.GetByUserNameAsync(username);
+            return Ok(user);
         }
         catch (Exception e)
         {
@@ -56,14 +36,23 @@ public class UserController(UserRepository userRepository) : ControllerBase
         }
     }
 
-    [Authorize]
-    [HttpDelete("{username}")]
-    public async Task<IActionResult> DeleteUser(string username)
+    [HttpPost("{username}/{email}/{displayName}")]
+    public async Task<ActionResult<User>> CreateAsync(string username, string email, string displayName)
     {
         try
         {
-            await userRepository.DeleteUser(username);
-            return Ok("User deleted");
+            var user = new User
+            {
+                Username = username,
+                DisplayName = displayName,
+                Bio = null,
+                ProfilePictureUrl = null,
+                UserRole = UserRole.User,
+                CreatedAt = DateTime.Now,
+            };
+
+            var createdUser = await service.CreateAsync(user);
+            return CreatedAtAction(nameof(GetAsync), new { userId = createdUser.Id }, createdUser);
         }
         catch (Exception e)
         {
@@ -71,18 +60,36 @@ public class UserController(UserRepository userRepository) : ControllerBase
         }
     }
 
-    // PUT: api/Users/5/ProfilePicture
-    [HttpPut("{username}/ProfilePicture")]
-    public async Task<IActionResult> UpdateProfilePicture(string username, int profilePictureId)
+    [HttpPut("{userId:int}")]
+    public async Task<ActionResult> UpdateAsync(int userId, [FromBody] User updatedUser)
     {
         try
         {
-            await userRepository.UpdateProfilePicture(username, profilePictureId);
-            return Ok("Profile picture updated");
+            if (updatedUser.Id != userId)
+                return BadRequest("User ID mismatch");
+
+            var result = await service.UpdateAsync(updatedUser);
+            if (!result) return NotFound();
+
+            return NoContent();
         }
         catch (Exception e)
         {
             return BadRequest(e.Message);
         }
     }
-}    
+
+    [HttpDelete("{userId:int}")]
+    public async Task<ActionResult<bool>> DeleteAsync(int userId)
+    {
+        try
+        {
+            var isDeleted = await service.DeleteAsync(userId);
+            return Ok(isDeleted);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+}

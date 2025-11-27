@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PurpleMediaRest.Services.Interfaces;
 using TwitterClone.Data;
@@ -27,12 +23,12 @@ public class TweetService: ITweetService
             _db.Tweets.Where(t => t.AuthorId == userId)
         );
 
-    public async Task<Tweet> CreateAsync(int authorId, string text, int? parentTweetId = null)
+    public async Task<Tweet> CreateAsync(int authorId, string content, int? parentTweetId = null)
     {
         var tweet = new Tweet
         {
             AuthorId = authorId,
-            Content = text,
+            Content = content,
             ParentTweetId = parentTweetId,
             CreatedAt = DateTime.UtcNow
         };
