@@ -17,13 +17,19 @@ export class AttachmentService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/api/attachments`;
 
-  create(tweetId: number, url: string, contentType: string): Observable<void> {
-    return this.http.post<void>(this.apiUrl, null, {
-      params: {tweetId, url, contentType}
-    });
+  create(tweetId: number, file: File): Observable<TweetAttachment> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('tweetId', tweetId.toString());
+
+    return this.http.post<TweetAttachment>(this.apiUrl, formData);
   }
 
   getForTweet(tweetId: number): Observable<TweetAttachment[]> {
     return this.http.get<TweetAttachment[]>(`${this.apiUrl}/${tweetId}`);
+  }
+
+  delete(attachmentId: number): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.apiUrl}/${attachmentId}`);
   }
 }

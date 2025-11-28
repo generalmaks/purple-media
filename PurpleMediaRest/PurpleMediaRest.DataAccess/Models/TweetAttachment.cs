@@ -12,11 +12,12 @@ public class TweetAttachment
     public int TweetId { get; set; }
 
     [ForeignKey(nameof(TweetId))]
-    public Tweet Tweet { get; set; } = default!;
+    public Tweet Tweet { get; set; } = null!;
 
-    [Required, MaxLength(256)]
-    public string Url { get; set; } = default!;
+    [Required] public byte[] Data { get; set; } = null!;
 
     [Required, MaxLength(32)]
-    public string MediaType { get; set; } = default!;
+    public string MediaType { get; set; } = null!;
+
+    [Required, MaxLength(256)] public string FileName { get; set; } = null!;
 }
