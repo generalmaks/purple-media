@@ -13,17 +13,4 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   username = '';
   password = '';
-
-  constructor(private authService: AuthService, private router: Router) {}
-
-  onLogin() {
-    this.authService.login(this.username, this.password).subscribe({
-      next: () => this.router.navigate(['/']), // redirect after login
-      error: err => alert(err.error || 'Login failed')
-    });
-  }
-
-  toRegister() {
-    this.router.navigate(['/register'])
-  }
 }

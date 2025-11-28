@@ -12,24 +12,4 @@ import { FormsModule } from '@angular/forms'
 })
 export class HeaderComponent {
   searchQuery: string = ''
-  constructor(public authService: AuthService, private router: Router) { }
-
-  onLoginLogout() {
-    if(this.authService.isLoggedIn()){
-      this.authService.logout();
-      this.router.navigate(['/'])
-    } else {
-      this.router.navigate(['/login'])
-    }
-  }
-
-  search() {
-    if(this.searchQuery.trim().length > 0){
-      this.router.navigate(['/search', this.searchQuery.trim()]);
-    }
-  }
-  toMainPage(){
-    this.searchQuery = ''
-    this.router.navigate(['/'])
-  }
 }

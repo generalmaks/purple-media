@@ -3,7 +3,6 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { TweetService } from '../../services/tweet.service';
 import { TweetComponent } from "../tweet/tweet.component";
 import { ComposerComponent } from "../composer/composer.component";
-import {Tweet} from "../../interfaces/tweet";
 
 @Component({
   selector: 'app-tweet-feed',
@@ -14,7 +13,7 @@ import {Tweet} from "../../interfaces/tweet";
 })
 export class TweetFeedComponent {
   @Input() userId: string | null = null
-  @Input() tweets: Tweet[] = []
+  @Input() tweets: string[] = []
   constructor(private tweetService: TweetService) { }
 
 }

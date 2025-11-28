@@ -14,19 +14,4 @@ export class RegisterComponent {
   username = '';
   password = '';
   email = '';
-
-  constructor(private authService: AuthService, private router: Router) {}
-
-  onRegister() {
-    this.authService.register(this.username, this.password, this.email).subscribe({
-      next: () => this.router.navigate(['/login']),
-      error: err =>{
-        console.error(err);
-        alert(err.error.toString() || 'Registration failed')}
-    });
-  }
-
-  toLogin() {
-    this.router.navigate(['/login']);
-  }
 }

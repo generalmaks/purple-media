@@ -5,7 +5,6 @@ import {TweetComponent} from "../../components/tweet/tweet.component";
 import {NgIf, NgFor} from '@angular/common'
 import {TweetService} from "../../services/tweet.service";
 import {ActivatedRoute} from '@angular/router'
-import {Tweet} from "../../interfaces/tweet";
 
 @Component({
   selector: 'app-search-feed',
@@ -19,29 +18,9 @@ import {Tweet} from "../../interfaces/tweet";
   styleUrl: './search-feed.component.css'
 })
 export class SearchFeedComponent{
-  tweets: Tweet[] = []
+  tweets: string[] = []
   snippet: string | null = null
 
-  constructor(
-    private tweetService: TweetService,
-    private route: ActivatedRoute) {}
-
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.snippet = params.get("snippet");
-      if(this.snippet){
-        this.loadSearchedTweets(this.snippet);
-      }
-    })
-  }
-
-  loadSearchedTweets(query: string) {
-    this.tweetService.searchTweets(query).subscribe(results => {
-      let tweetsInfo = results.map(r => r.post)
-      this.tweets = tweetsInfo;
-    }, error => {
-      console.error(error);
-      alert('Snippet search failed. Try again.');
-    })
   }
 }

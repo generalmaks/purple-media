@@ -1,6 +1,6 @@
 <div id=loginForm>
   <h2>Register</h2>
-  <form (ngSubmit)="onRegister()">
+  <form>
     <label>Username:</label>
     <input type="text" [(ngModel)]="username" name="username" required />
 
@@ -13,5 +13,5 @@
     <button type="submit">Register</button>
   </form>
   <h3>Have an account already?</h3>
-  <button (click)="toLogin()" id="toLogin" type="button">Login</button>
+  <button id="toLogin" type="button">Login</button>
 </div>

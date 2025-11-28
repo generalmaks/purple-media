@@ -1,6 +1,6 @@
 <article class="tweet">
   <header class="tweet-header">
-    <a (click)="toUserPage()" class="author-link">
+    <a class="author-link">
       <img
         id="profile-picture"
         [src]="profilePictureUrl"
@@ -19,8 +19,8 @@
       {{ tweet?.createdAt | date : "medium" }}
     </time>
     <nav class="response-info" aria-label="Tweet actions">
-      <button (click)="handleLike()">❤️ {{ tweet?.likedBy?.length || 0 }}</button>
-      <button (click)="openResponses()">💬 {{ tweet?.responses?.length || 0 }}</button>
+      <button>❤️ {{ tweet?.likedBy?.length || 0 }}</button>
+      <button>💬 {{ tweet?.responses?.length || 0 }}</button>
     </nav>
   </footer>
 </article>
