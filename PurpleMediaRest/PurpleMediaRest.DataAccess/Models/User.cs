@@ -14,6 +14,9 @@ public class User
     public string DisplayName { get; set; } = null!;
 
     [MaxLength(256)]
+    public string HashedPassword { get; set; } = null!;
+
+    [MaxLength(256)]
     public string? Bio { get; set; }
 
     [MaxLength(256)]

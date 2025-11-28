@@ -21,6 +21,8 @@ public class UserService : IUserService
 
     public async Task<User> CreateAsync(User user)
     {
+        if (await _db.Users.FirstOrDefaultAsync(u => u.Username == user.Username) is not null)
+            throw new Exception("User with this name already exists.");
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
         return user;

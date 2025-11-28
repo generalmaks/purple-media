@@ -36,8 +36,8 @@ public class UserController(IUserService service) : ControllerBase
         }
     }
 
-    [HttpPost("{username}/{email}/{displayName}")]
-    public async Task<ActionResult<User>> CreateAsync(string username, string email, string displayName)
+    [HttpPost("{username}/{displayName}")]
+    public async Task<ActionResult<User>> CreateAsync(string username, string displayName)
     {
         try
         {
@@ -48,11 +48,11 @@ public class UserController(IUserService service) : ControllerBase
                 Bio = null,
                 ProfilePictureUrl = null,
                 UserRole = UserRole.User,
-                CreatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
             };
 
             var createdUser = await service.CreateAsync(user);
-            return CreatedAtAction(nameof(GetAsync), new { userId = createdUser.Id }, createdUser);
+            return Created();
         }
         catch (Exception e)
         {
