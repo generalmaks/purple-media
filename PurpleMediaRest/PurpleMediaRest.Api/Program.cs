@@ -1,7 +1,12 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
+using PurpleMediaRest.Services.Interfaces;
+using PurpleMediaRest.Services.Services;
+using TwitterClone.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +73,15 @@ builder.Services.AddCors(options =>
                           policy.AllowCredentials();
                       });
 });
+
+builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+builder.Services.AddScoped<IFollowService, FollowService>();
+builder.Services.AddScoped<ILikeService, LikeService>();
+builder.Services.AddScoped<ITweetService, TweetService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

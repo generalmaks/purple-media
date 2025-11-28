@@ -18,6 +18,18 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         
+        modelBuilder.Entity<Follow>()
+            .HasOne(f => f.Follower)
+            .WithMany(u => u.Following)
+            .HasForeignKey(f => f.FollowerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Follow>()
+            .HasOne(f => f.Followed)
+            .WithMany(u => u.Followers)
+            .HasForeignKey(f => f.FollowedId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
