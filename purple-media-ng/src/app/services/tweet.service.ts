@@ -1,39 +1,40 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../environment';
-import {SearchResult} from "../interfaces/search-result";
-import {Tweet} from "../interfaces/tweet";
+import {inject, Injectable} from "@angular/core";
+import {environment} from "../../environment";
+import {Observable} from "rxjs";
+import { HttpClient } from "@angular/common/http";
+
+export interface Tweet {
+  id: number;
+  authorId: number;
+  content: string;
+  parentId?: number;
+  createdAt: Date;
+}
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class TweetService {
-  private apiUrl = environment.apiUrl + '/Post';
+  private http = inject(HttpClient);
+  private apiUrl = `${environment.apiUrl}/api/tweets`;
 
-  constructor(private http: HttpClient) { }
-
-  getTweets(): Observable<any[]> {
-    return this.http.get<Tweet[]>(this.apiUrl)
+  get(tweetId: number): Observable<Tweet | null> {
+    return this.http.get<Tweet | null>(`${this.apiUrl}/${tweetId}`);
   }
 
-  getTweetsByUser(userId: string) {
-    return this.http.get<Tweet[]>(this.apiUrl + '/GetByUsername/' + userId)
+  getUserTweets(userId: number): Observable<Tweet[]> {
+    return this.http.get<Tweet[]>(`${this.apiUrl}/from-user/${userId}`);
   }
 
-  searchTweets(snippet: string){
-    return this.http.get<SearchResult[]>(this.apiUrl + '/search/'+snippet)
+  create(authorId: number, content: string, parentId?: number): Observable<Tweet> {
+    const url = parentId
+      ? `${this.apiUrl}/${authorId}/${content}/${parentId}`
+      : `${this.apiUrl}/${authorId}/${content}`;
+    return this.http.post<Tweet>(url, null);
   }
 
-  postTweet(post: any){
-    return this.http.post<Tweet>(this.apiUrl, post)
-  }
-
-  getTweetsById(id: string) {
-    return this.http.get<Tweet>(this.apiUrl + '/' + id);
-  }
-
-  getResponsesToTweet(id: string) {
-    return this.http.get<Tweet[]>(this.apiUrl + '/responses/' + id);
+  delete(tweetId: number): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.apiUrl}/${tweetId}`);
   }
 }

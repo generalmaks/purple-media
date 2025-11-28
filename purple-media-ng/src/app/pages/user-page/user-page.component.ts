@@ -4,7 +4,7 @@ import {ActivatedRoute} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {DatePipe, NgFor} from '@angular/common';
 import {TweetService} from '../../services/tweet.service';
-import {FileServiceService} from "../../services/file-service.service";
+import {AttachmentService} from "../../services/attachment-service";
 
 @Component({
   selector: 'app-user-page',
@@ -22,7 +22,7 @@ export class UserPageComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private userService: UserService,
               private tweetService: TweetService,
-              private fileService: FileServiceService) {
+              private fileService: AttachmentService) {
   }
 
   ngOnInit(): void {
