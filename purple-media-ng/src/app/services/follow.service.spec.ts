@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AttachmentService } from './attachment-service';
+import { FollowService } from './follow.service';
 
-describe('AttachmentService', () => {
-  let service: AttachmentService;
+describe('FollowService', () => {
+  let service: FollowService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AttachmentService);
+    service = TestBed.inject(FollowService);
   });
 
   it('should be created', () => {

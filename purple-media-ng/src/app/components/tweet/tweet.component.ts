@@ -4,7 +4,7 @@ import { CommonModule, NgIf } from '@angular/common';
 import {AuthService} from "../../services/auth.service";
 import { ActivatedRoute, Router } from '@angular/router'
 import {TweetService} from "../../services/tweet.service";
-import { FileServiceService} from "../../services/file-service.service";
+import { AttachmentService} from "../../services/attachment-service";
 
 @Component({
   selector: 'app-tweet',
@@ -23,7 +23,7 @@ export class TweetComponent{
     private actRouter: ActivatedRoute,
     private router: Router,
     private tweetService: TweetService,
-    private fileService: FileServiceService) {
+    private fileService: AttachmentService) {
   }
 
   ngOnInit() {
