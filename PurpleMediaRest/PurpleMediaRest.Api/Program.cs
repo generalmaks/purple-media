@@ -79,6 +79,7 @@ builder.Services.AddScoped<IFollowService, FollowService>();
 builder.Services.AddScoped<ILikeService, LikeService>();
 builder.Services.AddScoped<ITweetService, TweetService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

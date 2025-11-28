@@ -18,6 +18,8 @@ public class AuthService(
 {
     public async Task RegisterAsync(RegisterDto registerDto)
     {
+        if (await db.Users.AnyAsync(u => u.Username == registerDto.username))
+            throw new Exception("User with this username already exists");
         var user = new User
         {
             Id = 0,
@@ -40,7 +42,7 @@ public class AuthService(
     public async Task<string> LoginAsync(LoginDto loginDto)
     {
         var foundUser = await db.Users.FirstOrDefaultAsync(u => u.Username == loginDto.username);
-        if (foundUser is null || foundUser.HashedPassword != BCrypt.Net.BCrypt.HashPassword(loginDto.unhashedPassword))
+        if (foundUser is null || !BCrypt.Net.BCrypt.Verify(loginDto.unhashedPassword, foundUser.HashedPassword))
             throw new KeyNotFoundException("Invalid credentials");
         return GenerateToken(foundUser.Id, foundUser.Username, foundUser.UserRole.ToString());
     }

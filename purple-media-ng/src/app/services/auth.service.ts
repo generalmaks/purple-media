@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from "../../environment";
 import {jwtDecode} from 'jwt-decode';
-import {Observable} from "rxjs";
+import {catchError, Observable, tap, throwError} from "rxjs";
 
 export interface RegisterDto {
   username: string;
@@ -10,24 +10,36 @@ export interface RegisterDto {
   unhashedPassword: string;
 }
 
+export interface LoginDto {
+  username: string,
+  unhashedPassword: string
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = environment.apiUrl + '/Auth'
+  private apiUrl = environment.apiUrl + '/auth'
   private http = inject(HttpClient)
   private tokenKey = 'jwt-token';
 
-  register(username: string, displayName: string, unhashedPassword: string): Observable<void> {
+  register(dto: RegisterDto): Observable<void> {
     return this.http.post<void>(
-      `${this.apiUrl}/register/${username}/${displayName}/${unhashedPassword}`,
+      `${this.apiUrl}/register/${dto.username}/${dto.displayName}/${dto.unhashedPassword}`,
       null);
   }
 
-  login(username: string, unhashedPassword: string): Observable<string> {
-    return this.http.post<string>(
-      `${this.apiUrl}/login/${username}/${unhashedPassword}`,
-      null
+  login(dto: LoginDto): Observable<string> {
+    return this.http.post(
+      `${this.apiUrl}/login/${dto.username}/${dto.unhashedPassword}`,
+      dto,
+      { responseType: 'text'}
+    ).pipe(
+      tap(token => localStorage.setItem(this.tokenKey, token)),
+      catchError(err => {
+        console.error('Login error: ' + err)
+        return throwError(() => err)
+      })
     )
   }
 
