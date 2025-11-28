@@ -16,9 +16,9 @@
   </form>
 
   <nav id="login-controls" aria-label="User actions">
-    <p> {{ false ? "Not logged in" : "Not logged in" }}</p>
+    <p> {{ isLoggedIn() ? "Not logged in" : "Not logged in" }}</p>
     <button class="button">
-      {{ false ? "Logout" : "Login" }}
+      {{ isLoggedIn() ? "Logout" : "Login" }}
     </button>
   </nav>
 </header>

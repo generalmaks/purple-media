@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { Router } from '@angular/router';
 import {AuthService} from "../../services/auth.service";
 import { FormsModule } from '@angular/forms'
@@ -12,4 +12,10 @@ import { FormsModule } from '@angular/forms'
 })
 export class HeaderComponent {
   searchQuery: string = ''
+
+  private auth = inject(AuthService);
+
+  isLoggedIn(){
+    return this.auth.isLoggedIn();
+  }
 }
