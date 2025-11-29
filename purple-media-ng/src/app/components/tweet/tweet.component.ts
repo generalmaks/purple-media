@@ -11,12 +11,7 @@ import {Tweet} from "../../services/tweet.service";
   styleUrl: './tweet.component.css'
 })
 export class TweetComponent{
-  @Input() tweet: Tweet = {
-    id: 0,
-    authorId: 0,
-    content: "",
-    createdAt: new Date()
-  }
+  @Input() tweet: Tweet
 
   private router = inject(Router)
 

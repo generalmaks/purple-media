@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
-import { TweetFeedComponent } from "./components/tweet-feed/tweet-feed.component";
 import { SidebarComponent } from "./components/sidebar/sidebar.component";
 
 @Component({
