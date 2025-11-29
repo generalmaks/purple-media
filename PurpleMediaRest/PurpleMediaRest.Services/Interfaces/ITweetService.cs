@@ -1,3 +1,5 @@
+using PurpleMediaRest.DataAccess.Models;
+
 namespace PurpleMediaRest.Services.Interfaces;
 
 public interface ITweetService

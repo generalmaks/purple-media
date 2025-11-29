@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using purple_media_rest.PurpleMediaRest.DataAccess.Models;
+using PurpleMediaRest.DataAccess;
+using PurpleMediaRest.DataAccess.Models;
 using PurpleMediaRest.Services.Dto.Attachments;
 using PurpleMediaRest.Services.Interfaces;
-using TwitterClone.Data;
 
 namespace PurpleMediaRest.Services.Services;
 

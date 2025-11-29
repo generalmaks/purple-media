@@ -1,4 +1,4 @@
-using purple_media_rest.PurpleMediaRest.DataAccess.Models;
+using PurpleMediaRest.DataAccess.Models;
 using PurpleMediaRest.Services.Dto.Attachments;
 
 namespace PurpleMediaRest.Services.Interfaces;

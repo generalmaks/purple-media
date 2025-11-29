@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using purple_media_rest.PurpleMediaRest.DataAccess.Models;
 using PurpleMediaRest.DataAccess.Enums;
+
+namespace PurpleMediaRest.DataAccess.Models;
 
 public class User
 {

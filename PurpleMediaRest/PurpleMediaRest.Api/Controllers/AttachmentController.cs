@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using purple_media_rest.PurpleMediaRest.DataAccess.Models;
 using PurpleMediaRest.Api.Dto.Attachments;
+using PurpleMediaRest.DataAccess.Models;
 using PurpleMediaRest.Services.Dto.Attachments;
 using PurpleMediaRest.Services.Interfaces;
 
-namespace purple_media_rest.Controllers;
+namespace PurpleMediaRest.Api.Controllers;
 
 [ApiController]
 [Route("api/attachments")]

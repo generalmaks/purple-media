@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
+using PurpleMediaRest.DataAccess;
 using PurpleMediaRest.Services.Interfaces;
 using PurpleMediaRest.Services.Services;
-using TwitterClone.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

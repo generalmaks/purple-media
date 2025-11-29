@@ -4,10 +4,11 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using PurpleMediaRest.DataAccess;
 using PurpleMediaRest.DataAccess.Enums;
+using PurpleMediaRest.DataAccess.Models;
 using PurpleMediaRest.Services.Dto.Auth;
 using PurpleMediaRest.Services.Interfaces;
-using TwitterClone.Data;
 
 namespace PurpleMediaRest.Services.Services;
 

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using purple_media_rest.PurpleMediaRest.DataAccess.Models;
+using PurpleMediaRest.DataAccess.Models;
 
-namespace TwitterClone.Data;
+namespace PurpleMediaRest.DataAccess;
 
 public class AppDbContext : DbContext
 {

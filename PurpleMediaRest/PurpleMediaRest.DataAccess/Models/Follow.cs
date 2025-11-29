@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace purple_media_rest.PurpleMediaRest.DataAccess.Models;
+namespace PurpleMediaRest.DataAccess.Models;
 
 public class Follow
 {

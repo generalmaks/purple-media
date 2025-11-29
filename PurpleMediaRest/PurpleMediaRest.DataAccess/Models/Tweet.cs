@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using purple_media_rest.PurpleMediaRest.DataAccess.Models;
+
+namespace PurpleMediaRest.DataAccess.Models;
 
 public class Tweet
 {

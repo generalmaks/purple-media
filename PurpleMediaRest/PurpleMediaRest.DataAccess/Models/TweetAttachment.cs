@@ -1,7 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace purple_media_rest.PurpleMediaRest.DataAccess.Models;
+namespace PurpleMediaRest.DataAccess.Models;
 
 public class TweetAttachment
 {
@@ -12,6 +13,7 @@ public class TweetAttachment
     public int TweetId { get; set; }
 
     [ForeignKey(nameof(TweetId))]
+    [JsonIgnore]
     public Tweet Tweet { get; set; } = null!;
 
     [Required] public byte[] Data { get; set; } = null!;

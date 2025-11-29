@@ -2,7 +2,7 @@
 using PurpleMediaRest.Services.Dto.Auth;
 using PurpleMediaRest.Services.Interfaces;
 
-namespace purple_media_rest.Controllers;
+namespace PurpleMediaRest.Api.Controllers;
 
 [ApiController]
 [Route("api/auth")]
