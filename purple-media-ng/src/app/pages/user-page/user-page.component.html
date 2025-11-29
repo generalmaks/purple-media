@@ -8,5 +8,8 @@
   </header>
   <section class="user-tweets">
     <p class="tweets-by-user">Tweets by {{user.username}}</p>
+    @for (tweet of userTweets; track tweet.id){
+      <app-tweet [tweet]="tweet"/>
+    }
   </section>
 </main>
