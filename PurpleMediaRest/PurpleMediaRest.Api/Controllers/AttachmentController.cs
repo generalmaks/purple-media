@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using purple_media_rest.PurpleMediaRest.DataAccess.Models;
+using PurpleMediaRest.Api.Dto.Attachments;
 using PurpleMediaRest.Services.Dto.Attachments;
 using PurpleMediaRest.Services.Interfaces;
 
@@ -10,11 +11,17 @@ namespace purple_media_rest.Controllers;
 public class AttachmentController(IAttachmentService service) : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult> Create([FromForm] int tweetId, [FromForm] IFormFile file)
+    public async Task<ActionResult> Create([FromForm] AttachmentCreateRequest request)
     {
         try
         {
-            await service.AddAsync(tweetId, new FileUploadDto(file.OpenReadStream(), file.FileName, file.ContentType, file.Length));
+            await service.AddAsync(request.TweetId,
+                new FileUploadDto(
+                    request.File.OpenReadStream(),
+                    request.File.FileName,
+                    request.File.ContentType,
+                    request.File.Length
+                ));
             return Created();
         }
         catch (Exception e)
