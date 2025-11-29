@@ -18,22 +18,22 @@ public class AttachmentService : IAttachmentService
 
     public async Task<TweetAttachment> AddAsync(int tweetId, FileUploadDto fileUpload)
     {
-        if (fileUpload.fileStream is null || fileUpload.fileSize == 0)
+        if (fileUpload.FileStream is null || fileUpload.FileSize == 0)
             throw new ArgumentException("No file provided");
-        if (fileUpload.fileSize > MaxFileSize)
+        if (fileUpload.FileSize > MaxFileSize)
             throw new ArgumentException($"File size exceeds maximum allowed size of {MaxFileSize / 1024 / 1024}.");
 
         var tweetExists = await _db.Tweets.AnyAsync(t => t.Id == tweetId);
         if (!tweetExists)
             throw new ArgumentException("Tweet doesnt exist.");
         
-        var extension = Path.GetExtension(fileUpload.fileName).ToLowerInvariant();
-        var fileName = $"{fileUpload.fileName}-{Guid.NewGuid()}{extension}";
+        var extension = Path.GetExtension(fileUpload.FileName).ToLowerInvariant();
+        var fileName = $"{fileUpload.FileName}-{Guid.NewGuid()}{extension}";
 
         byte[] fileData;
         using (var ms = new MemoryStream())
         {
-            await fileUpload.fileStream.CopyToAsync(ms);
+            await fileUpload.FileStream.CopyToAsync(ms);
             fileData = ms.ToArray();
         }
 
@@ -41,7 +41,7 @@ public class AttachmentService : IAttachmentService
         {
             TweetId = tweetId,
             Data = fileData,
-            MediaType = fileUpload.contentType,
+            MediaType = fileUpload.ContentType,
             FileName = fileName
         };
 
