@@ -3,7 +3,7 @@ import {TweetFeedComponent} from "../../components/tweet-feed/tweet-feed.compone
 import {ComposerComponent} from "../../components/composer/composer.component";
 import {TweetComponent} from "../../components/tweet/tweet.component";
 import {NgIf, NgFor} from '@angular/common'
-import {TweetService} from "../../services/tweet.service";
+import {Tweet, TweetService} from "../../services/tweet.service";
 import {ActivatedRoute} from '@angular/router'
 
 @Component({
@@ -18,7 +18,7 @@ import {ActivatedRoute} from '@angular/router'
   styleUrl: './search-feed.component.css'
 })
 export class SearchFeedComponent{
-  tweets: string[] = []
+  tweets: Tweet[] = []
   snippet: string | null = null
 
   ngOnInit(): void {

@@ -1,5 +1,5 @@
 <app-tweet [tweet]="mainTweet"></app-tweet>
 <app-composer [isInResponse]="true" [responseTweetId]="1"></app-composer>
-<div *ngFor="let response of responses">
+@for (response of responses; track response) {
   <app-tweet [tweet]="response"></app-tweet>
-</div>
+}

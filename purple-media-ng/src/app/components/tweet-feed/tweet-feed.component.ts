@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { TweetService } from '../../services/tweet.service';
+import {Tweet, TweetService} from '../../services/tweet.service';
 import { TweetComponent } from "../tweet/tweet.component";
 import { ComposerComponent } from "../composer/composer.component";
 
@@ -13,7 +13,7 @@ import { ComposerComponent } from "../composer/composer.component";
 })
 export class TweetFeedComponent {
   @Input() userId: string | null = null
-  @Input() tweets: string[] = []
+  @Input() tweets: Tweet[] = []
   constructor(private tweetService: TweetService) { }
 
 }

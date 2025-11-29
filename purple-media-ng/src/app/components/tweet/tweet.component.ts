@@ -1,10 +1,7 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { LikesService } from '../../services/likes.service';
+import {Component, inject, Input} from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
-import {AuthService} from "../../services/auth.service";
-import { ActivatedRoute, Router } from '@angular/router'
-import {TweetService} from "../../services/tweet.service";
-import { AttachmentService} from "../../services/attachment-service";
+import {Router} from "@angular/router";
+import {Tweet} from "../../services/tweet.service";
 
 @Component({
   selector: 'app-tweet',
@@ -14,6 +11,16 @@ import { AttachmentService} from "../../services/attachment-service";
   styleUrl: './tweet.component.css'
 })
 export class TweetComponent{
-  @Input() tweet: any
-  profilePictureUrl?: string;
+  @Input() tweet: Tweet = {
+    id: 0,
+    authorId: 0,
+    content: "",
+    createdAt: new Date()
+  }
+
+  private router = inject(Router)
+
+  toUserProfile() {
+    this.router.navigate([`/user/${this.tweet.authorId}`])
+  }
 }

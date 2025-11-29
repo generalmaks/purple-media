@@ -3,24 +3,24 @@
     <a class="author-link">
       <img
         id="profile-picture"
-        [src]="profilePictureUrl"
         alt="PFP"
+        (click)="toUserProfile()"
       />
-      <h3>{{ tweet?.author }}</h3>
+      <h3>{{ tweet.authorId }}</h3>
     </a>
   </header>
 
   <section class="tweet-content">
-    <p>{{ tweet?.content }}</p>
+    <p>{{ tweet.content }}</p>
   </section>
 
   <footer class="tweet-footer">
-    <time [attr.datetime]="tweet?.createdAt">
-      {{ tweet?.createdAt | date : "medium" }}
+    <time [attr.datetime]="tweet.createdAt">
+      {{ tweet.createdAt | date : "medium" }}
     </time>
     <nav class="response-info" aria-label="Tweet actions">
-      <button>❤️ {{ tweet?.likedBy?.length || 0 }}</button>
-      <button>💬 {{ tweet?.responses?.length || 0 }}</button>
+      <button>❤️ LIKES</button>
+      <button>💬 RESPONSES</button>
     </nav>
   </footer>
 </article>
