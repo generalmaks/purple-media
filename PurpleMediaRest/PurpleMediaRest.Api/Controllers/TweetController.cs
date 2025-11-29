@@ -7,6 +7,20 @@ namespace purple_media_rest.Controllers;
 [Route("/api/tweets")]
 public class TweetController(ITweetService service) : ControllerBase
 {
+    [HttpGet("latest/{page:int}/{pageSize:int}")]
+    public async Task<ActionResult<IEnumerable<Tweet>>> GetLatest(int page, int pageSize)
+    {
+        try
+        {
+            var latest = await service.GetLatestAsync(page, pageSize);
+            return Ok(latest);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+    
     [HttpGet("{tweetId:int}")]
     public async Task<ActionResult<Tweet?>> GetAsync(int tweetId)
     {
