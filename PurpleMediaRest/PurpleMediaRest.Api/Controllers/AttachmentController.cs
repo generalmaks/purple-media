@@ -31,12 +31,39 @@ public class AttachmentController(IAttachmentService service) : ControllerBase
     }
 
     [HttpGet("{tweetId:int}")]
-    public async Task<ActionResult<IEnumerable<TweetAttachment>>> GetForTweetAsync(int tweetId)
+    public async Task<ActionResult<IEnumerable<GetAttachmentDto>>> GetForTweetAsync(int tweetId)
     {
         try
         {
             var attachments = await service.GetForTweetAsync(tweetId);
-            return Ok(attachments);
+
+            var dtos = attachments.Select(a => new GetAttachmentDto(
+                a.Id,
+                a.FileName,
+                a.MediaType,
+                $"/attachments/file/{a.Id}"
+            ));
+
+            return Ok(dtos);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpGet("file/{fileId:int}")]
+    public async Task<ActionResult<GetAttachmentDto>> GetFileAsync(int fileId)
+    {
+        try
+        {
+            var attachment = await service.GetAsync(fileId);
+            var stream = new MemoryStream(attachment.Data);
+            return File(stream, attachment.MediaType, attachment.FileName);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
         }
         catch (Exception e)
         {

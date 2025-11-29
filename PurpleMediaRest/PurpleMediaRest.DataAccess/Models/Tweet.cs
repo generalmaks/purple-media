@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace PurpleMediaRest.DataAccess.Models;
 
@@ -25,6 +26,7 @@ public class Tweet
 
     public List<Tweet> Replies { get; set; } = new();
 
+    [JsonIgnore]
     public List<TweetAttachment> Attachments { get; set; } = new();
 
     public List<TweetLike> Likes { get; set; } = new();

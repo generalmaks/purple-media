@@ -7,4 +7,5 @@ public interface IAttachmentService
 {
     Task<TweetAttachment> AddAsync(int tweetId, FileUploadDto fileUploadDto);
     Task<IEnumerable<TweetAttachment>> GetForTweetAsync(int tweetId);
+    Task<TweetAttachment> GetAsync(int fileId);
 }

@@ -13,6 +13,19 @@
     <p>{{ tweet.content }}</p>
   </section>
 
+  @for (att of attachments; track att.id) {
+    @if (isImage(att)) {
+      <img
+        [src]="apiUrl + att.url"
+        alt="Tweet Attachment"
+        width="300"
+        height="300"
+        class="tweet-image">
+    }
+  }
+  <p>Attachments count: {{ attachments.length }}</p>
+  <p>Id: {{ tweet.id }}</p>
+
   <footer class="tweet-footer">
     <time [attr.datetime]="tweet.createdAt">
       {{ tweet.createdAt | date : "medium" }}

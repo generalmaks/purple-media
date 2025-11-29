@@ -6,24 +6,18 @@ using PurpleMediaRest.Services.Interfaces;
 
 namespace PurpleMediaRest.Services.Services;
 
-public class AttachmentService : IAttachmentService
+public class AttachmentService(AppDbContext db) : IAttachmentService
 {
-    private const int MaxFileSize = 10 * 1024 * 1024;
-    private readonly AppDbContext _db;
-
-    public AttachmentService(AppDbContext db)
-    {
-        _db = db;
-    }
+    private const int MaxFileSize = 2 * 1024 * 1024;
 
     public async Task<TweetAttachment> AddAsync(int tweetId, FileUploadDto fileUpload)
     {
         if (fileUpload.FileStream is null || fileUpload.FileSize == 0)
             throw new ArgumentException("No file provided");
         if (fileUpload.FileSize > MaxFileSize)
-            throw new ArgumentException($"File size exceeds maximum allowed size of {MaxFileSize / 1024 / 1024}.");
+            throw new ArgumentException($"File size exceeds maximum allowed size of {MaxFileSize / 1024 / 1024}MB.");
 
-        var tweetExists = await _db.Tweets.AnyAsync(t => t.Id == tweetId);
+        var tweetExists = await db.Tweets.AnyAsync(t => t.Id == tweetId);
         if (!tweetExists)
             throw new ArgumentException("Tweet doesnt exist.");
         
@@ -45,14 +39,17 @@ public class AttachmentService : IAttachmentService
             FileName = fileName
         };
 
-        await _db.Attachments.AddAsync(attachment);
-        await _db.SaveChangesAsync();
+        await db.Attachments.AddAsync(attachment);
+        await db.SaveChangesAsync();
 
         return attachment;
     }
 
     public async Task<IEnumerable<TweetAttachment>> GetForTweetAsync(int tweetId) =>
         await Task.FromResult<IEnumerable<TweetAttachment>>(
-            _db.Attachments.Where(a => a.TweetId == tweetId)
+            db.Attachments.Where(a => a.TweetId == tweetId)
         );
+
+    public async Task<TweetAttachment> GetAsync(int fileId) => 
+        await db.Attachments.FindAsync(fileId) ?? throw new KeyNotFoundException("File not found.");
 }

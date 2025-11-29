@@ -5,9 +5,9 @@ import {Observable} from "rxjs";
 
 export interface TweetAttachment {
   id: number;
-  tweetId: number;
-  url: string;
-  contentType: string;
+  name: string;
+  mediaType: string;
+  url: string
 }
 
 @Injectable({
@@ -15,7 +15,7 @@ export interface TweetAttachment {
 })
 export class AttachmentService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/api/attachments`;
+  private apiUrl = `${environment.apiUrl}/attachments`;
 
   create(tweetId: number, file: File): Observable<TweetAttachment> {
     const formData = new FormData();
@@ -27,9 +27,5 @@ export class AttachmentService {
 
   getForTweet(tweetId: number): Observable<TweetAttachment[]> {
     return this.http.get<TweetAttachment[]>(`${this.apiUrl}/${tweetId}`);
-  }
-
-  delete(attachmentId: number): Observable<boolean> {
-    return this.http.delete<boolean>(`${this.apiUrl}/${attachmentId}`);
   }
 }

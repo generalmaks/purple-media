@@ -16,7 +16,7 @@ public class TweetAttachment
     [JsonIgnore]
     public Tweet Tweet { get; set; } = null!;
 
-    [Required] public byte[] Data { get; set; } = null!;
+    [Required, JsonIgnore] public byte[] Data { get; set; } = null!;
 
     [Required, MaxLength(32)]
     public string MediaType { get; set; } = null!;
