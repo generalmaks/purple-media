@@ -16,6 +16,7 @@ public class AttachmentController(IAttachmentService service) : ControllerBase
         try
         {
             await service.AddAsync(request.TweetId,
+                request.UserId,
                 new FileUploadDto(
                     request.File.OpenReadStream(),
                     request.File.FileName,
@@ -64,6 +65,29 @@ public class AttachmentController(IAttachmentService service) : ControllerBase
         catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpGet("pfp/{userId:int}")]
+    public async Task<ActionResult<GetAttachmentDto>> GetForUsersPfpAsync(int userId)
+    {
+        try
+        {
+            var pfp = await service.GetForUsersPfpAsync(userId);
+            if (pfp is null) return NotFound("Profile picture is not set");
+
+            var dto = new GetAttachmentDto(
+                pfp.Id,
+                pfp.FileName,
+                pfp.MediaType,
+                $"/attachments/file/{pfp.Id}"
+            );
+
+            return Ok(dto);
         }
         catch (Exception e)
         {

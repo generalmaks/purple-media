@@ -28,4 +28,8 @@ export class AttachmentService {
   getForTweet(tweetId: number): Observable<TweetAttachment[]> {
     return this.http.get<TweetAttachment[]>(`${this.apiUrl}/${tweetId}`);
   }
+
+  getForPfp(userId: number): Observable<TweetAttachment> {
+    return this.http.get<TweetAttachment>(`${this.apiUrl}/pfp/${userId}`)
+  }
 }

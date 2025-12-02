@@ -2,10 +2,12 @@
   <header class="tweet-header">
     <a class="author-link">
       <img
+        [src]="apiUrl + pfpAttachment.url"
         id="profile-picture"
         alt="PFP"
         (click)="toUserProfile()"
       />
+      <h3>{{ user?.username}}</h3>
     </a>
   </header>
 

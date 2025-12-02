@@ -4,6 +4,8 @@ import {DatePipe} from '@angular/common';
 import {ActivatedRoute} from "@angular/router";
 import {Tweet, TweetService} from "../../services/tweet.service";
 import {TweetComponent} from "../../components/tweet/tweet.component";
+import {environment} from "../../../environment";
+import {AttachmentService, TweetAttachment} from "../../services/attachment-service";
 
 @Component({
   selector: 'app-user-page',
@@ -16,11 +18,13 @@ export class UserPageComponent implements OnInit {
   userId: number
   user: User
   userTweets: Tweet[] = []
-  profilePictureUrl?: string
+  apiUrl = environment.apiUrl;
+  pfpAttachment: TweetAttachment;
 
   private userService = inject(UserService)
   private activatedRoute = inject(ActivatedRoute)
   private tweetService = inject(TweetService)
+  private attachmentService = inject(AttachmentService)
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -34,13 +38,21 @@ export class UserPageComponent implements OnInit {
   private loadUser() {
     this.userService.get(this.userId).subscribe(user => {
       this.user = user!
-      this.profilePictureUrl = user?.profilePictureUrl
+      this.loadPfp()
     })
   }
 
   private loadUserTweets() {
     this.tweetService.getUserTweets(this.userId).subscribe(tweets => {
       this.userTweets = tweets
+    })
+  }
+
+  private loadPfp() {
+    this.attachmentService.getForPfp(this.userId).subscribe({
+      next: (att) => {
+        this.pfpAttachment = att
+      }, error: err => console.error(err)
     })
   }
 }

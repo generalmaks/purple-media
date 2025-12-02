@@ -5,6 +5,7 @@ import {Tweet} from "../../services/tweet.service";
 import {AttachmentService, TweetAttachment} from "../../services/attachment-service";
 import {DomSanitizer} from "@angular/platform-browser";
 import {environment} from "../../../environment";
+import {User, UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-tweet',
@@ -15,18 +16,28 @@ import {environment} from "../../../environment";
 })
 export class TweetComponent implements OnInit{
   @Input() tweet: Tweet
+  user: User
   attachments: TweetAttachment[] = []
+  pfpAttachment: TweetAttachment
   apiUrl = environment.apiUrl
 
 
   private router = inject(Router)
   private attachService = inject(AttachmentService)
+  private userService = inject(UserService)
+
 
   ngOnInit() {
     this.attachService.getForTweet(this.tweet.id).subscribe({
       next: (atts) => {
         this.attachments = atts
+        this.loadPfp()
       }, error : err => console.error("Failed at retreiving tweet attachments: " + err)
+    })
+
+    this.userService.get(this.tweet.authorId).subscribe({
+      next: u => this.user = u!,
+      error: err => console.error("Failed to retreive tweet user" + err)
     })
   }
 
@@ -37,4 +48,13 @@ export class TweetComponent implements OnInit{
   isImage(att: TweetAttachment): boolean {
     return att.mediaType.startsWith("image/")
   }
+
+  loadPfp() {
+    this.attachService.getForPfp(this.tweet.authorId).subscribe({
+      next: (att) => {
+        this.pfpAttachment = att
+      }, error: err => console.error(err)
+    })
+  }
+
 }

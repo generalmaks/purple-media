@@ -9,12 +9,16 @@ public class TweetAttachment
     [Key]
     public int Id { get; set; }
 
-    [Required]
-    public int TweetId { get; set; }
+    public int? TweetId { get; set; }
 
     [ForeignKey(nameof(TweetId))]
     [JsonIgnore]
     public Tweet Tweet { get; set; } = null!;
+    
+    public int? UserPfpId { get; set; }
+    
+    [ForeignKey(nameof(UserPfpId))]
+    public User UserPfp { get; set; }
 
     [Required, JsonIgnore] public byte[] Data { get; set; } = null!;
 

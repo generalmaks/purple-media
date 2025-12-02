@@ -10,17 +10,24 @@ public class AttachmentService(AppDbContext db) : IAttachmentService
 {
     private const int MaxFileSize = 2 * 1024 * 1024;
 
-    public async Task<TweetAttachment> AddAsync(int tweetId, FileUploadDto fileUpload)
+    public async Task<TweetAttachment> AddAsync(int? tweetId, int? userPfpId, FileUploadDto fileUpload)
     {
         if (fileUpload.FileStream is null || fileUpload.FileSize == 0)
             throw new ArgumentException("No file provided");
         if (fileUpload.FileSize > MaxFileSize)
             throw new ArgumentException($"File size exceeds maximum allowed size of {MaxFileSize / 1024 / 1024}MB.");
+        if ((tweetId is null && userPfpId is null) || (tweetId is not null && userPfpId is not null))
+            throw new ArgumentException("You can attach file only to tweet or users profile picture");
+        if (userPfpId is not null && !fileUpload.ContentType.StartsWith("image/"))
+            throw new ArgumentException("You can only upload images as users profile picture");
 
-        var tweetExists = await db.Tweets.AnyAsync(t => t.Id == tweetId);
-        if (!tweetExists)
-            throw new ArgumentException("Tweet doesnt exist.");
-        
+        if(tweetId is not null)
+        {
+            var tweetExists = await db.Tweets.AnyAsync(t => t.Id == tweetId);
+            if (!tweetExists)
+                throw new ArgumentException("Tweet doesnt exist.");
+        }
+
         var extension = Path.GetExtension(fileUpload.FileName).ToLowerInvariant();
         var fileName = $"{fileUpload.FileName}-{Guid.NewGuid()}{extension}";
 
@@ -34,6 +41,7 @@ public class AttachmentService(AppDbContext db) : IAttachmentService
         var attachment = new TweetAttachment
         {
             TweetId = tweetId,
+            UserPfpId = userPfpId,
             Data = fileData,
             MediaType = fileUpload.ContentType,
             FileName = fileName
@@ -50,6 +58,8 @@ public class AttachmentService(AppDbContext db) : IAttachmentService
             db.Attachments.Where(a => a.TweetId == tweetId)
         );
 
-    public async Task<TweetAttachment> GetAsync(int fileId) => 
+    public async Task<TweetAttachment?> GetForUsersPfpAsync(int userId) =>
+        await db.Attachments.FirstOrDefaultAsync(a => a.UserPfpId == userId);
+    public async Task<TweetAttachment> GetAsync(int fileId) =>
         await db.Attachments.FindAsync(fileId) ?? throw new KeyNotFoundException("File not found.");
 }
