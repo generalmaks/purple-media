@@ -1,13 +1,15 @@
 <main class="user-page">
   <header class="profile-header">
-    <img [src]="profilePictureUrl" alt="PFP" />
+    <img [src]="pfpAttachment ? apiUrl + pfpAttachment.url : ''" alt="PFP"/>
     <div class="user-info">
-      <h1>{{ user.username }}</h1>
-      <p>Joined at: {{ user.createdAt | date : "medium" }}</p>
+      <h1>{{ user?.username }}</h1>
+      <p>Joined at: {{ user?.createdAt | date : "medium" }}</p>
     </div>
   </header>
   <section class="user-tweets">
-    <p class="tweets-by-user">Tweets by {{user.username}}</p>
-    <app-tweet-feed [tweets]="userTweets"></app-tweet-feed>
+    <p class="tweets-by-user">Tweets by {{user?.username}}</p>
+    @for (tweet of userTweets; track tweet.id){
+      <app-tweet [tweet]="tweet"/>
+    }
   </section>
 </main>

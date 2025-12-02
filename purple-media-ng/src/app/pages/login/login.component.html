@@ -1,14 +1,14 @@
 <div id=loginForm>
 <h2>Login</h2>
-<form (ngSubmit)="onLogin()">
+<form (ngSubmit)="submit()">
   <label>Username:</label>
-  <input type="text" [(ngModel)]="username" name="username" required />
+  <input type="text" [(ngModel)]="login().username" name="username" required />
 
   <label>Password:</label>
-  <input type="password" [(ngModel)]="password" name="password" required />
+  <input type="password" [(ngModel)]="login().unhashedPassword" name="password" required />
 
   <button type="submit">Login</button>
 </form>
   <h3>Don't have an account?</h3>
-  <button (click)="toRegister()" id="toRegister">Register</button>
+  <button (click)="toRegisterPage()" id="toRegister">Register</button>
 </div>

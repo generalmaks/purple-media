@@ -1,5 +1,5 @@
 <section class="composer" aria-label="Create a new post">
-  <form (ngSubmit)="onPost()">
+  <form>
     <label for="postContent" class="visually-hidden">Write your post</label>
     <textarea
       id="postContent"
@@ -15,7 +15,6 @@
         type="button"
         class="btn"
         id="visibility"
-        (click)="onChangeVisibility()"
       >
         {{ visibility }}
       </button>

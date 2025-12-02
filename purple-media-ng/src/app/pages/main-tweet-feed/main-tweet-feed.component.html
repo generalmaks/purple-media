@@ -1,2 +1,6 @@
-<app-composer></app-composer>
-<app-tweet-feed [tweets]="tweets"></app-tweet-feed>
+<div cdkScrollable (scroll)="onScroll($event)" class="scroll-container">
+  <app-composer/>
+  @for (tweet of tweets; track tweet.id) {
+    <app-tweet [tweet]="tweet"/>
+  }
+</div>

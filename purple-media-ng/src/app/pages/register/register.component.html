@@ -1,17 +1,17 @@
 <div id=loginForm>
   <h2>Register</h2>
-  <form (ngSubmit)="onRegister()">
+  <form (ngSubmit)="submit()">
     <label>Username:</label>
-    <input type="text" [(ngModel)]="username" name="username" required />
+    <input type="text" [(ngModel)]="login().username" name="username" required />
+
+    <label>Display Name:</label>
+    <input type="text" [(ngModel)]="login().displayName" name="displayName" required>
 
     <label>Password:</label>
-    <input type="password" [(ngModel)]="password" name="password" required />
-
-    <label>Email:</label>
-    <input type="email" [(ngModel)]="email" name="email" required>
+    <input type="password" [(ngModel)]="login().unhashedPassword" name="password" required />
 
     <button type="submit">Register</button>
   </form>
-  <h3>Have an account already?</h3>
-  <button (click)="toLogin()" id="toLogin" type="button">Login</button>
+  <h3>Already have an account?</h3>
+  <button (click)="toLoginPage()" id="toRegister">Login</button>
 </div>

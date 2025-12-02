@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, inject, model} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import {AuthService, LoginDto, RegisterDto} from "../../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -11,19 +11,24 @@ import { Router } from '@angular/router';
   imports: [FormsModule]
 })
 export class LoginComponent {
-  username = '';
-  password = '';
+  private auth = inject(AuthService);
+  private router = inject(Router)
 
-  constructor(private authService: AuthService, private router: Router) {}
+  login = model<LoginDto>({
+    username: '',
+    unhashedPassword: ''
+  });
 
-  onLogin() {
-    this.authService.login(this.username, this.password).subscribe({
-      next: () => this.router.navigate(['/']), // redirect after login
-      error: err => alert(err.error || 'Login failed')
-    });
+  submit() {
+    const dto = this.login();
+
+    this.auth.login(dto).subscribe(() => {
+      console.log("Logged in")
+      this.router.navigate(['/'])
+    })
   }
 
-  toRegister() {
+  toRegisterPage() {
     this.router.navigate(['/register'])
   }
 }

@@ -1,5 +1,4 @@
 import {Routes} from '@angular/router';
-import {TweetFeedComponent} from './components/tweet-feed/tweet-feed.component';
 import {UserPageComponent} from './pages/user-page/user-page.component';
 import {LoginComponent} from "./pages/login/login.component";
 import {RegisterComponent} from "./pages/register/register.component";

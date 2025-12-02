@@ -23,7 +23,7 @@ export interface User {
 })
 export class UserService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/api/users`;
+  private apiUrl = `${environment.apiUrl}/users`;
 
   get(userId: number): Observable<User | null> {
     return this.http.get<User | null>(`${this.apiUrl}/${userId}`);

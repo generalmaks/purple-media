@@ -1,26 +1,40 @@
 <article class="tweet">
   <header class="tweet-header">
-    <a (click)="toUserPage()" class="author-link">
+    <a class="author-link">
       <img
+        [src]="apiUrl + pfpAttachment.url"
         id="profile-picture"
-        [src]="profilePictureUrl"
         alt="PFP"
+        (click)="toUserProfile()"
       />
-      <h3>{{ tweet?.author }}</h3>
+      <h3>{{ user?.username}}</h3>
     </a>
   </header>
 
   <section class="tweet-content">
-    <p>{{ tweet?.content }}</p>
+    <p>{{ tweet.content }}</p>
   </section>
 
+  @for (att of attachments; track att.id) {
+    @if (isImage(att)) {
+      <img
+        [src]="apiUrl + att.url"
+        alt="Tweet Attachment"
+        width="300"
+        height="300"
+        class="tweet-image">
+    }
+  }
+  <p>Attachments count: {{ attachments.length }}</p>
+  <p>Id: {{ tweet.id }}</p>
+
   <footer class="tweet-footer">
-    <time [attr.datetime]="tweet?.createdAt">
-      {{ tweet?.createdAt | date : "medium" }}
+    <time [attr.datetime]="tweet.createdAt">
+      {{ tweet.createdAt | date : "medium" }}
     </time>
     <nav class="response-info" aria-label="Tweet actions">
-      <button (click)="handleLike()">❤️ {{ tweet?.likedBy?.length || 0 }}</button>
-      <button (click)="openResponses()">💬 {{ tweet?.responses?.length || 0 }}</button>
+      <button>❤️ LIKES</button>
+      <button>💬 RESPONSES</button>
     </nav>
   </footer>
 </article>

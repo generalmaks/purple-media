@@ -4,10 +4,11 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using PurpleMediaRest.DataAccess;
 using PurpleMediaRest.DataAccess.Enums;
+using PurpleMediaRest.DataAccess.Models;
 using PurpleMediaRest.Services.Dto.Auth;
 using PurpleMediaRest.Services.Interfaces;
-using TwitterClone.Data;
 
 namespace PurpleMediaRest.Services.Services;
 
@@ -18,12 +19,14 @@ public class AuthService(
 {
     public async Task RegisterAsync(RegisterDto registerDto)
     {
+        if (await db.Users.AnyAsync(u => u.Username == registerDto.Username))
+            throw new Exception("User with this username already exists");
         var user = new User
         {
             Id = 0,
-            Username = registerDto.username,
-            DisplayName = registerDto.displayName,
-            HashedPassword = BCrypt.Net.BCrypt.HashPassword(registerDto.unhashedPassword),
+            Username = registerDto.Username,
+            DisplayName = registerDto.DisplayName,
+            HashedPassword = BCrypt.Net.BCrypt.HashPassword(registerDto.UnhashedPassword),
             Bio = null,
             ProfilePictureUrl = null,
             UserRole = UserRole.User,
@@ -39,8 +42,8 @@ public class AuthService(
 
     public async Task<string> LoginAsync(LoginDto loginDto)
     {
-        var foundUser = await db.Users.FirstOrDefaultAsync(u => u.Username == loginDto.username);
-        if (foundUser is null || foundUser.HashedPassword != BCrypt.Net.BCrypt.HashPassword(loginDto.unhashedPassword))
+        var foundUser = await db.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
+        if (foundUser is null || !BCrypt.Net.BCrypt.Verify(loginDto.UnhashedPassword, foundUser.HashedPassword))
             throw new KeyNotFoundException("Invalid credentials");
         return GenerateToken(foundUser.Id, foundUser.Username, foundUser.UserRole.ToString());
     }

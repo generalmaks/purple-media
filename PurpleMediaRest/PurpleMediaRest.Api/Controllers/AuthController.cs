@@ -2,10 +2,10 @@
 using PurpleMediaRest.Services.Dto.Auth;
 using PurpleMediaRest.Services.Interfaces;
 
-namespace purple_media_rest.Controllers;
+namespace PurpleMediaRest.Api.Controllers;
 
 [ApiController]
-[Route("api/aith")]
+[Route("api/auth")]
 public class AuthController(IAuthService service) : ControllerBase
 {
     [HttpPost("register/{username}/{displayName}/{unhashedPassword}")]
@@ -27,8 +27,12 @@ public class AuthController(IAuthService service) : ControllerBase
     {
         try
         {
-            var token = service.LoginAsync(new LoginDto(username, unhashedPassword));
+            var token = await service.LoginAsync(new LoginDto(username, unhashedPassword));
             return Ok(token);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Unauthorized(e.Message);
         }
         catch (Exception e)
         {

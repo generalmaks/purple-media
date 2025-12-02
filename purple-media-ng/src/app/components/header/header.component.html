@@ -1,9 +1,9 @@
 <header class="app-header">
-  <a (click)="toMainPage()" class="logo-link" aria-label="Home">
+  <a class="logo-link" aria-label="Home">
     <img src="assets/logo.png" id="logo" alt="App Logo" />
   </a>
 
-  <form class="search-form" (ngSubmit)="search()" role="search" aria-label="Site search">
+  <form class="search-form" role="search" aria-label="Site search">
     <label for="searchBar" class="visually-hidden">Search</label>
     <input
       id="searchBar"
@@ -16,9 +16,9 @@
   </form>
 
   <nav id="login-controls" aria-label="User actions">
-    <p> {{ authService.isLoggedIn() ? this.authService.getUsername() : "Not logged in" }}</p>
-    <button class="button" (click)="onLoginLogout()">
-      {{ authService.isLoggedIn() ? "Logout" : "Login" }}
+    <p> {{ isLoggedIn() ? "Logged in" : "Not logged in" }}</p>
+    <button (click)="loginLogout()" class="button">
+      {{ isLoggedIn() ? "Logout" : "Login" }}
     </button>
   </nav>
 </header>

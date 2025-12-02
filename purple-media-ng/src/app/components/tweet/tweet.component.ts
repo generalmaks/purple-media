@@ -1,91 +1,60 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { LikesService } from '../../services/likes.service';
-import { CommonModule, NgIf } from '@angular/common';
-import {AuthService} from "../../services/auth.service";
-import { ActivatedRoute, Router } from '@angular/router'
-import {TweetService} from "../../services/tweet.service";
-import { AttachmentService} from "../../services/attachment-service";
+import {Component, inject, Input, OnInit} from '@angular/core';
+import {CommonModule, NgIf, NgOptimizedImage} from '@angular/common';
+import {Router} from "@angular/router";
+import {Tweet} from "../../services/tweet.service";
+import {AttachmentService, TweetAttachment} from "../../services/attachment-service";
+import {DomSanitizer} from "@angular/platform-browser";
+import {environment} from "../../../environment";
+import {User, UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-tweet',
   standalone: true,
-  imports: [CommonModule, NgIf],
+  imports: [CommonModule],
   templateUrl: './tweet.component.html',
   styleUrl: './tweet.component.css'
 })
-export class TweetComponent{
-  @Input() tweet: any
-  profilePictureUrl?: string;
+export class TweetComponent implements OnInit{
+  @Input() tweet: Tweet
+  user: User
+  attachments: TweetAttachment[] = []
+  pfpAttachment: TweetAttachment
+  apiUrl = environment.apiUrl
 
-  constructor(
-    private likeService: LikesService,
-    private authService: AuthService,
-    private actRouter: ActivatedRoute,
-    private router: Router,
-    private tweetService: TweetService,
-    private fileService: AttachmentService) {
-  }
+
+  private router = inject(Router)
+  private attachService = inject(AttachmentService)
+  private userService = inject(UserService)
+
 
   ngOnInit() {
-    this.loadProfilePicture()
-  }
-  handleLike() {
-    if (!this.tweet || !this.tweet.postId) return;
+    this.attachService.getForTweet(this.tweet.id).subscribe({
+      next: (atts) => {
+        this.attachments = atts
+        this.loadPfp()
+      }, error : err => console.error("Failed at retreiving tweet attachments: " + err)
+    })
 
-    let currentUser = this.authService.getUsername()
-    if (!currentUser) {
-      console.error('You are not logged in!')
-      this.router.navigate(['/login'])
-      return;
-    }
-    currentUser = String(currentUser)
-
-    this.likeService.likePost(this.tweet.postId, currentUser).subscribe({
-      next: () => {
-        this.likeService.getLikes(this.tweet.postId).subscribe({
-          next: (likes: string[]) => {
-            this.tweet.likedBy = [...likes];
-          },
-          error: (err) => console.error('Error fetching likes:', err)
-        });
-      },
-      error: (err) => console.error('Error liking tweet:', err)
-    });
-  }
-
-  openResponses(): void{
-    this.router.navigate(['/tweet/', this.tweet.postId]);
-  }
-
-  toUserPage() {
-    if (this.tweet.author)
-    this.router.navigate(['/user/', this.tweet.author]);
-  }
-
-  getLikesAmount() {
-    this.likeService.getLikes(this.tweet.postId).subscribe({
-      next: res => {
-        this.tweet.likedBy = res;
-      }, error: (err) => {
-        console.error('Error fetching likes:', err)
-      }
+    this.userService.get(this.tweet.authorId).subscribe({
+      next: u => this.user = u!,
+      error: err => console.error("Failed to retreive tweet user" + err)
     })
   }
 
-  getResponsesAmount() {
-    this.tweetService.getResponsesToTweet(this.tweet.postId).subscribe({
-      next: res => {
-        this.tweet.responses = res;
-      }
+  toUserProfile() {
+    this.router.navigate([`/user/${this.tweet.authorId}`])
+  }
+
+  isImage(att: TweetAttachment): boolean {
+    return att.mediaType.startsWith("image/")
+  }
+
+  loadPfp() {
+    this.attachService.getForPfp(this.tweet.authorId).subscribe({
+      next: (att) => {
+        this.pfpAttachment = att
+      }, error: err => console.error(err)
     })
   }
 
-  loadProfilePicture() {
-    const id = this.tweet?.authorsProfilePictureId
-    if (!id) return
-    this.fileService.getFile(id).subscribe({
-      next: (blob: Blob) => this.profilePictureUrl = URL.createObjectURL(blob),
-      error: err => console.error('Error loading profile picture:', err)
-    })
-  }
 }

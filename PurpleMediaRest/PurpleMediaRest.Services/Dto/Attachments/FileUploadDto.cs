@@ -1,3 +1,3 @@
 ﻿namespace PurpleMediaRest.Services.Dto.Attachments;
 
-public record FileUploadDto(Stream fileStream, string fileName, string contentType, long fileSize);
+public record FileUploadDto(Stream FileStream, string FileName, string ContentType, long FileSize);

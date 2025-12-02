@@ -1,67 +1,58 @@
-import {Component, OnInit} from '@angular/core';
-import {TweetFeedComponent} from "../../components/tweet-feed/tweet-feed.component";
-import {ActivatedRoute} from '@angular/router';
-import {UserService} from '../../services/user.service';
-import {DatePipe, NgFor} from '@angular/common';
-import {TweetService} from '../../services/tweet.service';
-import {AttachmentService} from "../../services/attachment-service";
+import {Component, inject, OnInit} from '@angular/core';
+import {User, UserService} from '../../services/user.service';
+import {DatePipe} from '@angular/common';
+import {ActivatedRoute} from "@angular/router";
+import {Tweet, TweetService} from "../../services/tweet.service";
+import {TweetComponent} from "../../components/tweet/tweet.component";
+import {environment} from "../../../environment";
+import {AttachmentService, TweetAttachment} from "../../services/attachment-service";
 
 @Component({
   selector: 'app-user-page',
   standalone: true,
-  imports: [DatePipe, TweetFeedComponent],
+  imports: [DatePipe, TweetComponent],
   templateUrl: './user-page.component.html',
   styleUrl: './user-page.component.css'
 })
 export class UserPageComponent implements OnInit {
-  userId: string | null = ''
-  user: any
-  userTweets: any[] = []
-  profilePictureUrl?: string
+  userId: number
+  user: User
+  userTweets: Tweet[] = []
+  apiUrl = environment.apiUrl;
+  pfpAttachment: TweetAttachment;
 
-  constructor(private route: ActivatedRoute,
-              private userService: UserService,
-              private tweetService: TweetService,
-              private fileService: AttachmentService) {
-  }
+  private userService = inject(UserService)
+  private activatedRoute = inject(ActivatedRoute)
+  private tweetService = inject(TweetService)
+  private attachmentService = inject(AttachmentService)
 
   ngOnInit(): void {
-    this.userId = this.route.snapshot.paramMap.get("id")
-    if (this.userId) {
-      this.loadUserData(this.userId)
-    }
+    this.activatedRoute.paramMap.subscribe(params => {
+      this.userId = Number(params.get("id"))
+
+      this.loadUser()
+      this.loadUserTweets()
+    })
   }
 
-  loadUserData(userId: string | null) {
-    if (!userId) return;
+  private loadUser() {
+    this.userService.get(this.userId).subscribe(user => {
+      this.user = user!
+      this.loadPfp()
+    })
+  }
 
-    console.log("Getting tweets");
-    this.tweetService.getTweetsByUser(userId).subscribe(
-      res => {
-        this.userTweets = res.map(tweet => ({
-          ...tweet,
-          authorsProfilePictureId: this.user?.profilePictureId
-        }));
-      },
-      err => console.error(err)
-    );
+  private loadUserTweets() {
+    this.tweetService.getUserTweets(this.userId).subscribe(tweets => {
+      this.userTweets = tweets
+    })
+  }
 
-    console.log("Gettings user data")
-    this.userService.getUserPublicInfo(userId).subscribe(res => {
-      this.user = res;
-
-      const pfpId = this.user?.profilePictureId;
-
-      if (pfpId) {
-        this.fileService.getFile(pfpId).subscribe({
-          next: (blob: Blob) => {
-            this.profilePictureUrl = URL.createObjectURL(blob);
-          },
-          error: err => console.error('Error loading profile picture:', err)
-        });
-      } else {
-        console.warn('No profile picture ID found for user ', this.user);
-      }
-    });
+  private loadPfp() {
+    this.attachmentService.getForPfp(this.userId).subscribe({
+      next: (att) => {
+        this.pfpAttachment = att
+      }, error: err => console.error(err)
+    })
   }
 }

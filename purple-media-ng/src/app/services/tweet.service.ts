@@ -17,7 +17,11 @@ export interface Tweet {
 })
 export class TweetService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/api/tweets`;
+  private apiUrl = `${environment.apiUrl}/tweets`;
+
+  getLatest(page: number, pageSize: number): Observable<Tweet[]> {
+    return this.http.get<Tweet[]>(`${this.apiUrl}/latest/${page}/${pageSize}`)
+  }
 
   get(tweetId: number): Observable<Tweet | null> {
     return this.http.get<Tweet | null>(`${this.apiUrl}/${tweetId}`);

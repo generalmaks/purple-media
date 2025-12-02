@@ -1,12 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
+using PurpleMediaRest.DataAccess.Models;
 using PurpleMediaRest.Services.Interfaces;
 
-namespace purple_media_rest.Controllers;
+namespace PurpleMediaRest.Api.Controllers;
 
 [ApiController]
 [Route("/api/tweets")]
 public class TweetController(ITweetService service) : ControllerBase
 {
+    [HttpGet("latest/{page:int}/{pageSize:int}")]
+    public async Task<ActionResult<IEnumerable<Tweet>>> GetLatest(int page, int pageSize)
+    {
+        try
+        {
+            var latest = await service.GetLatestAsync(page, pageSize);
+            return Ok(latest);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+    
     [HttpGet("{tweetId:int}")]
     public async Task<ActionResult<Tweet?>> GetAsync(int tweetId)
     {

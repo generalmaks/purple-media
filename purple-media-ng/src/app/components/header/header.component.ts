@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component, inject} from '@angular/core';
+import {Router} from '@angular/router';
 import {AuthService} from "../../services/auth.service";
-import { FormsModule } from '@angular/forms'
+import {FormsModule} from '@angular/forms'
 
 @Component({
   selector: 'app-header',
@@ -12,24 +12,18 @@ import { FormsModule } from '@angular/forms'
 })
 export class HeaderComponent {
   searchQuery: string = ''
-  constructor(public authService: AuthService, private router: Router) { }
 
-  onLoginLogout() {
-    if(this.authService.isLoggedIn()){
-      this.authService.logout();
-      this.router.navigate(['/'])
-    } else {
-      this.router.navigate(['/login'])
-    }
+  private auth = inject(AuthService)
+  private router = inject(Router)
+
+  isLoggedIn() {
+    return this.auth.isLoggedIn()
   }
 
-  search() {
-    if(this.searchQuery.trim().length > 0){
-      this.router.navigate(['/search', this.searchQuery.trim()]);
-    }
-  }
-  toMainPage(){
-    this.searchQuery = ''
-    this.router.navigate(['/'])
+  loginLogout() {
+    if (this.isLoggedIn())
+      this.auth.logout()
+
+    this.router.navigate(['/login'])
   }
 }
