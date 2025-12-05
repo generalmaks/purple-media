@@ -1,46 +1,51 @@
 using Microsoft.EntityFrameworkCore;
 using PurpleMediaRest.DataAccess;
 using PurpleMediaRest.DataAccess.Models;
+using PurpleMediaRest.Services.Dto.Auth;
 using PurpleMediaRest.Services.Interfaces;
 
 namespace PurpleMediaRest.Services.Services;
 
-public class UserService : IUserService
+public class UserService(AppDbContext db) : IUserService
 {
-    private readonly AppDbContext _db;
-
-    public UserService(AppDbContext db)
-    {
-        _db = db;
-    }
-
-    public Task<User?> GetByIdAsync(int id) =>
-        _db.Users.FirstOrDefaultAsync(u => u.Id == id);
+    public Task<UserDto?> GetByIdAsync(int id) =>
+        db.Users.Where(u => u.Id == id)
+            .Select(u => new UserDto(
+                u.Id,
+                u.Username,
+                u.DisplayName,
+                u.Bio!,
+                u.ProfilePictureUrl!,
+                u.CreatedAt
+            ))
+            .FirstOrDefaultAsync();
 
     public Task<User?> GetByUserNameAsync(string username) =>
-        _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+        db.Users.FirstOrDefaultAsync(u => u.Username == username);
 
     public async Task<User> CreateAsync(User user)
     {
-        if (await _db.Users.FirstOrDefaultAsync(u => u.Username == user.Username) is not null)
+        if (await db.Users.FirstOrDefaultAsync(u => u.Username == user.Username) is not null)
             throw new Exception("User with this name already exists.");
-        _db.Users.Add(user);
-        await _db.SaveChangesAsync();
+        db.Users.Add(user);
+        await db.SaveChangesAsync();
         return user;
     }
 
     public async Task<bool> UpdateAsync(User user)
     {
-        _db.Users.Update(user);
-        return await _db.SaveChangesAsync() > 0;
+        db.Users.Update(user);
+        return await db.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var user = await GetByIdAsync(id);
-        if (user == null) return false;
+        var userDto = await GetByIdAsync(id);
+        if (userDto == null) return false;
 
-        _db.Users.Remove(user);
-        return await _db.SaveChangesAsync() > 0;
+        var user = await db.Users.FindAsync(userDto.Id);
+
+        db.Users.Remove(user!);
+        return await db.SaveChangesAsync() > 0;
     }
 }

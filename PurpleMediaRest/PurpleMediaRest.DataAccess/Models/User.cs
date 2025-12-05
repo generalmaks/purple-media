@@ -33,4 +33,7 @@ public class User
 
     public List<Follow> Following { get; set; } = [];
     public List<Follow> Followers { get; set; } = [];
+    
+    public List<ChatMessage> MessagesSent { get; set; }
+    public List<ChatMessage> MessagesReceived { get; set; }
 }

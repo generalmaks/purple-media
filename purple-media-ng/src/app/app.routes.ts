@@ -5,6 +5,7 @@ import {RegisterComponent} from "./pages/register/register.component";
 import {SearchFeedComponent} from "./pages/search-feed/search-feed.component";
 import {MainTweetFeedComponent} from "./pages/main-tweet-feed/main-tweet-feed.component";
 import {TweetResponsesComponent} from "./pages/tweet-responses/tweet-responses.component";
+import {ChatPageComponent} from "./pages/chat-page/chat-page.component";
 
 export const routes: Routes = [
   {path: '', component: MainTweetFeedComponent},
@@ -12,5 +13,6 @@ export const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'search/:snippet', component: SearchFeedComponent},
-  {path: 'tweet/:tweetId', component: TweetResponsesComponent}
+  {path: 'tweet/:tweetId', component: TweetResponsesComponent},
+  {path: 'chat', component: ChatPageComponent}
 ];

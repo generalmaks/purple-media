@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import {inject, Injectable} from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../environment';
+import { environment } from '../../../environment';
 
 export enum UserRole {
   User = 0,
@@ -16,6 +16,15 @@ export interface User {
   profilePictureUrl?: string;
   userRole: UserRole;
   createdAt: Date;
+}
+
+export interface UserDto {
+  id: number,
+  username: string,
+  displayName: string,
+  bio: string,
+  profilePictureUrl: string,
+  createdAt: string;
 }
 
 @Injectable({

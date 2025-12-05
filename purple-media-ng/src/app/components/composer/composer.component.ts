@@ -1,8 +1,8 @@
 import {Component, Input} from '@angular/core';
-import {AuthService} from "../../services/auth.service";
+import {AuthService} from "../../services/http/auth.service";
 import {Router} from '@angular/router';
 import {FormsModule} from '@angular/forms'
-import {TweetService} from "../../services/tweet.service";
+import {TweetService} from "../../services/http/tweet.service";
 
 const Visibility: string[] = [
   'PUBLIC',

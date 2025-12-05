@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PurpleMediaRest.Services.Dto.Auth;
 using PurpleMediaRest.Services.Interfaces;
 
@@ -6,7 +7,7 @@ namespace PurpleMediaRest.Api.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(IAuthService service) : ControllerBase
+public class AuthController(IAuthService service, IUserService userService) : ControllerBase
 {
     [HttpPost("register/{username}/{displayName}/{unhashedPassword}")]
     public async Task<ActionResult> Register(string username, string displayName, string unhashedPassword)
@@ -39,4 +40,17 @@ public class AuthController(IAuthService service) : ControllerBase
             return BadRequest(e.Message);
         }
     }
+    
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<ActionResult<UserDto>> GetCurrentUser()
+    {
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (!int.TryParse(userIdClaim, out int userId))
+            return Unauthorized();
+
+        var user = await userService.GetByIdAsync(userId);
+        return Ok(user);
+    }
+
 }

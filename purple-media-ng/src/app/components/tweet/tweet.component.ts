@@ -1,11 +1,11 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {CommonModule, NgIf, NgOptimizedImage} from '@angular/common';
 import {Router} from "@angular/router";
-import {Tweet} from "../../services/tweet.service";
-import {AttachmentService, TweetAttachment} from "../../services/attachment-service";
+import {Tweet} from "../../services/http/tweet.service";
+import {AttachmentService, TweetAttachment} from "../../services/http/attachment-service";
 import {DomSanitizer} from "@angular/platform-browser";
 import {environment} from "../../../environment";
-import {User, UserService} from "../../services/user.service";
+import {User, UserService} from "../../services/http/user.service";
 
 @Component({
   selector: 'app-tweet',

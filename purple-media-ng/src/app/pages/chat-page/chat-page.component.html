@@ -1,0 +1,40 @@
+<div style="display: flex; height: 100%;">
+
+  <!-- LEFT: chat list -->
+  <div style="width: 250px; border-right: 1px solid #ccc; padding: 10px;">
+    <h3>Your chats</h3>
+
+    <div *ngFor="let chat of chats"
+         (click)="selectChat(chat)"
+         style="padding: 8px; cursor: pointer; border-bottom: 1px solid #eee;"
+         [style.background]="selectedChat?.otherUserId === chat.otherUserId ? '#f0f0f0' : ''">
+
+      {{chat.otherUserUsername}}
+    </div>
+  </div>
+
+  <!-- RIGHT: chat window -->
+  <div style="flex: 1; padding: 10px; display: flex; flex-direction: column;">
+
+    <div *ngIf="!selectedChat" style="text-align: center; margin-top: 20px;">
+      Select a chat
+    </div>
+
+    <div *ngIf="selectedChat" style="flex: 1; overflow-y: auto; border-bottom: 1px solid #ccc;">
+      <div *ngFor="let msg of selectedChatMessages" style="margin: 8px 0;">
+        <b *ngIf="msg.senderId === currentUser.id">You:</b>
+        <b *ngIf="msg.senderId !== currentUser.id">{{selectedChat?.otherUserUsername}}:</b>
+        {{msg.content}}
+        {{msg.messageSent.toString()}}
+      </div>
+    </div>
+
+    <div *ngIf="selectedChat" style="display: flex; margin-top: 10px;">
+      <input [(ngModel)]="newMessage"
+             placeholder="Type a message"
+             style="flex: 1; padding: 5px;" />
+
+      <button (click)="send()" style="margin-left: 10px;">Send</button>
+    </div>
+  </div>
+</div>

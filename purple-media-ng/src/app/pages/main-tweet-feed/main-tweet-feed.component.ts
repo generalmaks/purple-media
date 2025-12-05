@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ComposerComponent} from "../../components/composer/composer.component";
-import {TweetService} from "../../services/tweet.service";
+import {TweetService} from "../../services/http/tweet.service";
 import {TweetComponent} from "../../components/tweet/tweet.component";
 
 @Component({

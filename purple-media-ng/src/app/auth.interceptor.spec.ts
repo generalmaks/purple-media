@@ -1,5 +1,5 @@
 import { AuthInterceptor } from './auth.interceptor';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services/http/auth.service';
 
 describe('AuthInterceptor', () => {
   let authService: AuthService;

@@ -1,8 +1,9 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from "../../environment";
+import {environment} from "../../../environment";
 import {jwtDecode} from 'jwt-decode';
 import {catchError, Observable, tap, throwError} from "rxjs";
+import {UserDto} from "./user.service";
 
 export interface RegisterDto {
   username: string;
@@ -33,7 +34,7 @@ export class AuthService {
     return this.http.post(
       `${this.apiUrl}/login/${dto.username}/${dto.unhashedPassword}`,
       dto,
-      { responseType: 'text'}
+      {responseType: 'text'}
     ).pipe(
       tap(token => localStorage.setItem(this.tokenKey, token)),
       catchError(err => {
@@ -55,16 +56,14 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  getUsername(): string | null {
-    const token = this.getToken();
-    if (!token) return null;
+  me() {
+    return this.http.get<UserDto>(`${this.apiUrl}/me`, {headers: this.getAuthHeaders()})
+  }
 
-    try {
-      const decoded: any = jwtDecode(token)
-      return decoded.username || decoded.sub
-    } catch (e) {
-      console.error('Invalid JWT: ', e);
-      return null;
-    }
+  private getAuthHeaders() {
+    const token = this.getToken()
+    return {
+      Authorization: `Bearer ${token}`
+    };
   }
 }

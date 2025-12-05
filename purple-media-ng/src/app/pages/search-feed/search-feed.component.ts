@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {NgIf, NgFor} from '@angular/common'
-import {Tweet, TweetService} from "../../services/tweet.service";
+import {Tweet, TweetService} from "../../services/http/tweet.service";
 
 @Component({
   selector: 'app-search-feed',

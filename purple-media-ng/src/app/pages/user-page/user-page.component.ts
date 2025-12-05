@@ -1,11 +1,11 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {User, UserService} from '../../services/user.service';
+import {User, UserService} from '../../services/http/user.service';
 import {DatePipe} from '@angular/common';
 import {ActivatedRoute} from "@angular/router";
-import {Tweet, TweetService} from "../../services/tweet.service";
+import {Tweet, TweetService} from "../../services/http/tweet.service";
 import {TweetComponent} from "../../components/tweet/tweet.component";
 import {environment} from "../../../environment";
-import {AttachmentService, TweetAttachment} from "../../services/attachment-service";
+import {AttachmentService, TweetAttachment} from "../../services/http/attachment-service";
 
 @Component({
   selector: 'app-user-page',
