@@ -2,7 +2,6 @@ import {inject, Injectable} from '@angular/core';
 import * as signalR from '@microsoft/signalr'
 import {BehaviorSubject} from "rxjs";
 import {environment} from "../../../environment";
-import {AuthService} from "../http/auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +31,8 @@ export class ChatService {
     });
   }
 
-  public sendMessage(targetUserId: string, message: string) {
+  public sendMessage(targetUserId: number, message: string
+  ) {
     if (this.hubConnection) {
       this.hubConnection.invoke('SendPrivateMessage', targetUserId, message)
         .catch(err => console.error(err));

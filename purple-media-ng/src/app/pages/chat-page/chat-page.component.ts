@@ -39,6 +39,21 @@ export class ChatPageComponent implements OnInit {
 
     this.loadChats()
     this.chatHub.startConnection(this.authService.getToken()!)
+
+    this.chatHub.messages$.subscribe(msg => {
+      if (!msg) return
+
+      if (this.selectedChat && this.selectedChat.otherUserId === Number(msg.sender)){
+        this.selectedChatMessages.push({
+          senderId: Number(msg.sender),
+          receiverId: this.currentUser.id,
+          content: msg.text,
+          isRead: false,
+          id: 0,
+          messageSent: new Date().toISOString()
+        });
+      }
+    })
   }
 
   loadChats() {
@@ -67,7 +82,7 @@ export class ChatPageComponent implements OnInit {
     const otherUserId = this.selectedChat.otherUserId;
     const text = this.newMessage;
 
-    this.chatHub.sendMessage(String(otherUserId), text);
+    this.chatHub.sendMessage(otherUserId, text);
 
     this.selectedChatMessages.push({
       content: this.newMessage, id: 0, isRead: false, messageSent: Date.now().toString(), receiverId: this.selectedChat.otherUserId, senderId: this.currentUser.id
