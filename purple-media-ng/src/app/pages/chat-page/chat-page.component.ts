@@ -2,9 +2,9 @@ import {Component, inject, OnInit} from '@angular/core';
 import {ChatService} from "../../services/chat/chat.service";
 import {ChatInfo, ChatMessage, ChatMessageService} from "../../services/http/chat-message.service";
 import {AuthService} from "../../services/http/auth.service";
-import {UserDto, UserService} from "../../services/http/user.service";
+import {UserDto} from "../../services/http/user.service";
 import {FormsModule} from "@angular/forms";
-import {NgForOf, NgIf} from "@angular/common";
+import {CommonModule, NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-chat-page',
@@ -12,7 +12,8 @@ import {NgForOf, NgIf} from "@angular/common";
   imports: [
     FormsModule,
     NgForOf,
-    NgIf
+    NgIf,
+    CommonModule
   ],
   templateUrl: './chat-page.component.html',
   styleUrl: './chat-page.component.css'
@@ -25,7 +26,7 @@ export class ChatPageComponent implements OnInit {
   selectedChatMessages: ChatMessage[]
   newMessage: string = ''
 
-  pageSize = 10
+  readonly pageSize = 10
 
   private chatHub = inject(ChatService)
   private chatMessages = inject(ChatMessageService)
