@@ -1,24 +1,37 @@
 <section class="composer" aria-label="Create a new post">
-  <form>
-    <label for="postContent" class="visually-hidden">Write your post</label>
+  <form (ngSubmit)="submitPost()" #f="ngForm">
+
     <textarea
       id="postContent"
       [(ngModel)]="postContent"
       name="postContent"
       placeholder="What's on your mind?"
       required
+      minlength="1"
+      maxlength="500"
+      #contentCtrl="ngModel"
     ></textarea>
 
+    <!-- Validation errors -->
+    <div class="error" *ngIf="contentCtrl.invalid && contentCtrl.touched">
+      <p *ngIf="contentCtrl.errors?.['required']">Post cannot be empty</p>
+      <p *ngIf="contentCtrl.errors?.['maxlength']">Max length is 500</p>
+    </div>
+
+    <div class="attachments-preview" *ngIf="selectedFiles.length > 0">
+      <p>Files:</p>
+      <ul>
+        <li *ngFor="let f of selectedFiles">{{ f.name }}</li>
+      </ul>
+    </div>
+
     <div class="composer-actions">
-      <button type="button" class="btn" id="attachments">Files</button>
-      <button
-        type="button"
-        class="btn"
-        id="visibility"
-      >
-        {{ visibility }}
+      <input type="file" hidden multiple #fileInput (change)="onFilesSelected($event)">
+      <button type="button" class="btn" (click)="fileInput.click()">Files</button>
+
+      <button type="submit" class="btn" [disabled]="f.invalid">
+        Post
       </button>
-      <button type="submit" class="btn" id="post">Post</button>
     </div>
   </form>
 </section>
