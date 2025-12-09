@@ -29,6 +29,9 @@ public class TweetService(AppDbContext db) : ITweetService
 
     public async Task<Tweet> CreateAsync(int authorId, string content, int? parentTweetId = null)
     {
+        if (parentTweetId is not null && await db.Tweets.FindAsync(parentTweetId) is null)
+            throw new KeyNotFoundException("Parent tweet not found.");
+        
         var tweet = new Tweet
         {
             AuthorId = authorId,

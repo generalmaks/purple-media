@@ -7,7 +7,8 @@
         alt="PFP"
         (click)="toUserProfile()"
       />
-      <h3>{{ user?.username}}</h3>
+      <h3>{{ user.username}}</h3>
+      <p>{{isCurrentUserFollowingAuthorBool ? "Following" : ""}}</p>
     </a>
   </header>
 
@@ -25,8 +26,6 @@
         class="tweet-image">
     }
   }
-  <p>Attachments count: {{ attachments.length }}</p>
-  <p>Id: {{ tweet.id }}</p>
 
   <footer class="tweet-footer">
     <time [attr.datetime]="tweet.createdAt">

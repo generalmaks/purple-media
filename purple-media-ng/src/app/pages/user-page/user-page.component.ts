@@ -6,6 +6,8 @@ import {Tweet, TweetService} from "../../services/http/tweet.service";
 import {TweetComponent} from "../../components/tweet/tweet.component";
 import {environment} from "../../../environment";
 import {AttachmentService, TweetAttachment} from "../../services/http/attachment-service";
+import {FollowService} from "../../services/http/follow.service";
+import {AuthService} from "../../services/http/auth.service";
 
 @Component({
   selector: 'app-user-page',
@@ -20,11 +22,15 @@ export class UserPageComponent implements OnInit {
   userTweets: Tweet[] = []
   apiUrl = environment.apiUrl;
   pfpAttachment: TweetAttachment;
+  isCurrentUserFollowing: boolean
+  currentUserId: number
 
   private userService = inject(UserService)
   private activatedRoute = inject(ActivatedRoute)
   private tweetService = inject(TweetService)
   private attachmentService = inject(AttachmentService)
+  private authService = inject(AuthService)
+  private followService = inject(FollowService)
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -33,6 +39,32 @@ export class UserPageComponent implements OnInit {
       this.loadUser()
       this.loadUserTweets()
     })
+
+    this.authService.me().subscribe({
+      next: currentUser => {
+        this.currentUserId = currentUser.id
+
+        this.followService.isFollowing(this.currentUserId, this.userId).subscribe({
+          next: isFollowing => this.isCurrentUserFollowing = isFollowing,
+          error: err => console.error('Could not determine if current user is following: ' + JSON.stringify(err))
+        })
+      },
+      error: err => console.error('Could not get current users ID: ' + JSON.stringify(err))
+    })
+  }
+
+  follow() {
+    if(this.isCurrentUserFollowing){
+      this.followService.unfollow(this.currentUserId, this.userId).subscribe({
+        next: () => this.isCurrentUserFollowing = false,
+        error: err => console.error('Could not unfollow user: ' + JSON.stringify(err))
+      })
+    } else {
+      this.followService.follow(this.currentUserId, this.userId).subscribe({
+        next: () => this.isCurrentUserFollowing = true,
+        error: err => console.error('Could not follow user: ' + JSON.stringify(err))
+      })
+    }
   }
 
   private loadUser() {

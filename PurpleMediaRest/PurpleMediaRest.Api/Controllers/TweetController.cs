@@ -49,7 +49,8 @@ public class TweetController(ITweetService service) : ControllerBase
             return BadRequest(e.Message);
         }
     }
-
+    
+    [HttpPost("{authorId:int}/{content}")]
     [HttpPost("{authorId:int}/{content}/{parentId:int?}")]
     public async Task<ActionResult> CreateAsync(int authorId, string content, int? parentId)
     {

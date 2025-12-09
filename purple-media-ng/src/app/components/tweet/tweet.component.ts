@@ -6,6 +6,8 @@ import {AttachmentService, TweetAttachment} from "../../services/http/attachment
 import {DomSanitizer} from "@angular/platform-browser";
 import {environment} from "../../../environment";
 import {User, UserService} from "../../services/http/user.service";
+import {AuthService} from "../../services/http/auth.service";
+import {FollowService} from "../../services/http/follow.service";
 
 @Component({
   selector: 'app-tweet',
@@ -20,11 +22,14 @@ export class TweetComponent implements OnInit{
   attachments: TweetAttachment[] = []
   pfpAttachment: TweetAttachment
   apiUrl = environment.apiUrl
+  isCurrentUserFollowingAuthorBool: boolean = false
 
 
   private router = inject(Router)
   private attachService = inject(AttachmentService)
   private userService = inject(UserService)
+  private authService = inject(AuthService)
+  private followService = inject(FollowService)
 
 
   ngOnInit() {
@@ -39,6 +44,8 @@ export class TweetComponent implements OnInit{
       next: u => this.user = u!,
       error: err => console.error("Failed to retreive tweet user" + err)
     })
+
+    this.isCurrentUserFollowingAuthor()
   }
 
   toUserProfile() {
@@ -57,4 +64,18 @@ export class TweetComponent implements OnInit{
     })
   }
 
+  isCurrentUserFollowingAuthor(){
+    let currentUserId: number
+    this.authService.me().subscribe({
+      next: dto => {
+        currentUserId = dto.id
+
+        this.followService.isFollowing(currentUserId, this.user.id).subscribe({
+          next: isFollowing => this.isCurrentUserFollowingAuthorBool = isFollowing,
+          error: err => console.error('Could not determine if current user is following tweet author: ' + JSON.stringify(err))
+        })
+      },
+      error: err => console.error('Could not determine current user from tweet: ' + JSON.stringify(err))
+    })
+  }
 }
