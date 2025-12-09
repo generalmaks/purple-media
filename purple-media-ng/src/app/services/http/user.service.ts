@@ -38,10 +38,6 @@ export class UserService {
     return this.http.get<User | null>(`${this.apiUrl}/${userId}`);
   }
 
-  getByUsername(username: string): Observable<User | null> {
-    return this.http.get<User | null>(`${this.apiUrl}/by-username/${username}`);
-  }
-
   create(username: string, displayName: string): Observable<User> {
     return this.http.post<User>(
       `${this.apiUrl}/${username}/${displayName}`,

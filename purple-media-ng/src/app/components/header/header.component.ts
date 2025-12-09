@@ -1,7 +1,9 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from "../../services/http/auth.service";
 import {FormsModule} from '@angular/forms'
+import {UserDto} from "../../services/http/user.service";
+import {environment} from "../../../environment";
 
 @Component({
   selector: 'app-header',
@@ -10,11 +12,29 @@ import {FormsModule} from '@angular/forms'
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit{
   searchQuery: string = ''
+  user: UserDto | null = null
+  pfpApiUrl = environment.apiUrl
 
   private auth = inject(AuthService)
   private router = inject(Router)
+
+  ngOnInit(){
+    this.loadUser()
+  }
+
+  loadUser(){
+    if(!this.auth.isLoggedIn()){
+      this.user = null
+      return
+    }
+
+    this.auth.me().subscribe({
+      next: dto => this.user = dto,
+      error: err => console.error('Could not get current users info: ' + JSON.stringify(err))
+    })
+  }
 
   isLoggedIn() {
     return this.auth.isLoggedIn()

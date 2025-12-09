@@ -1,10 +1,9 @@
 <header class="app-header">
   <a class="logo-link" aria-label="Home">
-    <img src="assets/logo.png" id="logo" alt="App Logo" />
+    <img src="assets/logo.png" id="logo" alt="App Logo"/>
   </a>
 
   <form class="search-form" role="search" aria-label="Site search">
-    <label for="searchBar" class="visually-hidden">Search</label>
     <input
       id="searchBar"
       [(ngModel)]="searchQuery"
@@ -16,9 +15,21 @@
   </form>
 
   <nav id="login-controls" aria-label="User actions">
-    <p> {{ isLoggedIn() ? "Logged in" : "Not logged in" }}</p>
-    <button (click)="loginLogout()" class="button">
-      {{ isLoggedIn() ? "Logout" : "Login" }}
-    </button>
+    <div class="user-container">
+
+      @if (user?.profilePictureUrl) {
+        <img class="pfp"
+             [src]="pfpApiUrl + user?.profilePictureUrl"
+             alt="Your profile picture">
+      }
+
+      <div class="user-info">
+        <p>{{ user ? user.username : "Not logged in" }}</p>
+        <button (click)="loginLogout()" class="button">
+          {{ user ? "Logout" : "Login" }}
+        </button>
+      </div>
+
+    </div>
   </nav>
 </header>
