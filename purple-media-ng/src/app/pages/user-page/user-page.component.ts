@@ -21,7 +21,7 @@ export class UserPageComponent implements OnInit {
   user: User
   userTweets: Tweet[] = []
   apiUrl = environment.apiUrl;
-  pfpAttachment: TweetAttachment;
+  pfpAttachment: TweetAttachment | null;
   isCurrentUserFollowing: boolean
   currentUserId: number
 
@@ -84,7 +84,7 @@ export class UserPageComponent implements OnInit {
     this.attachmentService.getForPfp(this.userId).subscribe({
       next: (att) => {
         this.pfpAttachment = att
-      }, error: err => console.error(err)
+      }, error: err => this.pfpAttachment = null
     })
   }
 }

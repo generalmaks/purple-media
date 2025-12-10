@@ -1,18 +1,20 @@
 <main class="user-page">
   <header class="profile-header">
-    <img [src]="pfpAttachment ? apiUrl + pfpAttachment.url : ''" alt="PFP" class="profile-pic"/>
+    <img [src]="pfpAttachment ? apiUrl + pfpAttachment.url : 'assets/default-pfp.jpg'" alt="PFP" class="profile-pic"/>
     <div class="user-info">
       <h1>{{ user.username }}</h1>
       <p class="join-date">Joined: {{ user.createdAt | date : "medium" }}</p>
       <p id="user-bio">{{ user.bio }}</p>
-      <button class="follow-button" (click)="follow()">{{isCurrentUserFollowing ? "Following" : "Follow"}}</button>
+      @if (currentUserId != userId) {
+        <button class="follow-button" (click)="follow()">{{ isCurrentUserFollowing ? "Following" : "Follow" }}</button>
+      }
     </div>
   </header>
 
   <section class="user-tweets">
-    <p class="tweets-by-user">Tweets by {{user.username}}</p>
+    <p class="tweets-by-user">Tweets by {{ user.username }}</p>
     <div class="tweet-list">
-      @for (tweet of userTweets; track tweet.id){
+      @for (tweet of userTweets; track tweet.id) {
         <app-tweet [tweet]="tweet" class="tweet-card"/>
       }
     </div>

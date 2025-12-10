@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router} from "@angular/router";
 import {Tweet} from "../../services/http/tweet.service";
@@ -7,6 +7,8 @@ import {environment} from "../../../environment";
 import {User, UserService} from "../../services/http/user.service";
 import {AuthService} from "../../services/http/auth.service";
 import {FollowService} from "../../services/http/follow.service";
+import {LikeService} from "../../services/http/like.service";
+import {combineLatest, switchMap, tap} from "rxjs";
 
 @Component({
   selector: 'app-tweet',
@@ -15,13 +17,15 @@ import {FollowService} from "../../services/http/follow.service";
   templateUrl: './tweet.component.html',
   styleUrl: './tweet.component.css'
 })
-export class TweetComponent implements OnInit{
+export class TweetComponent implements OnChanges {
   @Input() tweet: Tweet
   user: User
   attachments: TweetAttachment[] = []
-  pfpAttachment: TweetAttachment
+  pfpAttachment: TweetAttachment | null
+  likesAmount: number
   apiUrl = environment.apiUrl
   isCurrentUserFollowingAuthorBool: boolean = false
+  isCurrentUserLiked: boolean = false
 
 
   private router = inject(Router)
@@ -29,52 +33,75 @@ export class TweetComponent implements OnInit{
   private userService = inject(UserService)
   private authService = inject(AuthService)
   private followService = inject(FollowService)
+  private likeService = inject(LikeService)
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.tweet) return;
+
+    this.loadTweetData();
+  }
+
+  likePost() {
+    this.authService.me().pipe(
+      switchMap(me =>
+        this.likeService.isLiked(me.id, this.tweet.id).pipe(
+          switchMap(isLiked => {
+            if (isLiked) {
+              return this.likeService.unlike(me.id, this.tweet.id).pipe(
+                tap(() => {
+                  this.likesAmount--;
+                  this.isCurrentUserLiked = false;
+                })
+              );
+            } else {
+              return this.likeService.like(me.id, this.tweet.id).pipe(
+                tap(() => {
+                  this.likesAmount++;
+                  this.isCurrentUserLiked = true;
+                })
+              );
+            }
+          })
+        )
+      )
+    ).subscribe();
+  }
 
 
-  ngOnInit() {
-    this.attachService.getForTweet(this.tweet.id).subscribe({
-      next: (atts) => {
-        this.attachments = atts
-        this.loadPfp()
-      }, error : err => console.error("Failed at retreiving tweet attachments: " + err)
-    })
-
-    this.userService.get(this.tweet.authorId).subscribe({
-      next: u => this.user = u!,
-      error: err => console.error("Failed to retreive tweet user" + err)
-    })
-
-    this.isCurrentUserFollowingAuthor()
+  isImage(att: TweetAttachment): boolean {
+    return att.mediaType.startsWith("image/");
   }
 
   toUserProfile() {
-    this.router.navigate([`/user/${this.tweet.authorId}`])
+    this.router.navigate([`/user/${this.tweet.authorId}`]);
   }
 
-  isImage(att: TweetAttachment): boolean {
-    return att.mediaType.startsWith("image/")
+  private loadTweetData() {
+    combineLatest([
+      this.userService.get(this.tweet.authorId),
+      this.attachService.getForTweet(this.tweet.id),
+      this.likeService.countLikes(this.tweet.id),
+      this.authService.me(),
+    ]).subscribe(([user, attachments, likes, me]) => {
+      this.user = user!;
+      this.attachments = attachments;
+      this.likesAmount = likes;
+
+      this.loadPfp();
+
+      this.likeService.isLiked(me.id, this.tweet.id)
+        .subscribe(isLiked => this.isCurrentUserLiked = isLiked);
+
+      this.followService.isFollowing(me.id, user!.id)
+        .subscribe(isFollowing => this.isCurrentUserFollowingAuthorBool = isFollowing);
+    });
   }
 
-  loadPfp() {
-    this.attachService.getForPfp(this.tweet.authorId).subscribe({
-      next: (att) => {
-        this.pfpAttachment = att
-      }, error: err => console.error(err)
-    })
-  }
-
-  isCurrentUserFollowingAuthor(){
-    let currentUserId: number
-    this.authService.me().subscribe({
-      next: dto => {
-        currentUserId = dto.id
-
-        this.followService.isFollowing(currentUserId, this.user.id).subscribe({
-          next: isFollowing => this.isCurrentUserFollowingAuthorBool = isFollowing,
-          error: err => console.error('Could not determine if current user is following tweet author: ' + JSON.stringify(err))
-        })
-      },
-      error: err => console.error('Could not determine current user from tweet: ' + JSON.stringify(err))
-    })
+  private loadPfp() {
+    this.attachService.getForPfp(this.tweet.authorId)
+      .subscribe({
+        next: att => this.pfpAttachment = att,
+        error: err => this.pfpAttachment = null
+      });
   }
 }

@@ -7,8 +7,8 @@
       name="postContent"
       placeholder="What's on your mind?"
       required
-      minlength="1"
-      maxlength="500"
+      minlength="3"
+      maxlength="300"
       #contentCtrl="ngModel"
     ></textarea>
 
@@ -18,7 +18,7 @@
       <p *ngIf="contentCtrl.errors?.['maxlength']">Max length is 500</p>
     </div>
 
-    <div class="attachments-preview" *ngIf="selectedFiles.length > 0">
+    <div class="attachments-preview" *ngIf="selectedFiles !== undefined && selectedFiles.length > 0">
       <p>Files:</p>
       <ul>
         <li *ngFor="let f of selectedFiles">{{ f.name }}</li>

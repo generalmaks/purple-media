@@ -8,7 +8,7 @@ import {environment} from "../../../environment";
 })
 export class LikeService {
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl + '/api/like';
+  private apiUrl = environment.apiUrl + '/like';
 
   like(userId: number, tweetId: number): Observable<boolean> {
     return this.http.post<boolean>(
