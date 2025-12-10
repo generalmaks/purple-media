@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PurpleMediaRest.DataAccess.Models;
+using PurpleMediaRest.Services.Dto.Tweet;
 using PurpleMediaRest.Services.Interfaces;
 
 namespace PurpleMediaRest.Api.Controllers;
@@ -9,7 +10,7 @@ namespace PurpleMediaRest.Api.Controllers;
 public class TweetController(ITweetService service) : ControllerBase
 {
     [HttpGet("latest/{page:int}/{pageSize:int}")]
-    public async Task<ActionResult<IEnumerable<Tweet>>> GetLatest(int page, int pageSize)
+    public async Task<ActionResult<IEnumerable<TweetDto>>> GetLatest(int page, int pageSize)
     {
         try
         {
@@ -23,7 +24,7 @@ public class TweetController(ITweetService service) : ControllerBase
     }
     
     [HttpGet("{tweetId:int}")]
-    public async Task<ActionResult<Tweet?>> GetAsync(int tweetId)
+    public async Task<ActionResult<TweetDto?>> GetAsync(int tweetId)
     {
         try
         {
@@ -37,7 +38,7 @@ public class TweetController(ITweetService service) : ControllerBase
     }
 
     [HttpGet("from-user/{userId:int}")]
-    public async Task<ActionResult<IEnumerable<Tweet>>> GetUserTweetsAsync(int userId)
+    public async Task<ActionResult<IEnumerable<TweetDto>>> GetUserTweetsAsync(int userId)
     {
         try
         {
@@ -47,6 +48,25 @@ public class TweetController(ITweetService service) : ControllerBase
         catch (Exception e)
         {
             return BadRequest(e.Message);
+        }
+    }
+
+    [HttpGet("responses/{tweetId:int}")]
+    public async Task<ActionResult<IEnumerable<TweetDto>>> GetResponsesToTweetAsync(int tweetId)
+    {
+        try
+        {
+            var responses = await service.GetResponsesToTweetAsync(tweetId);
+            return Ok(responses);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
     }
     

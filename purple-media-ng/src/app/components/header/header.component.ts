@@ -12,7 +12,7 @@ import {environment} from "../../../environment";
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent implements OnInit {
   searchQuery: string = ''
   user: UserDto | null = null
   pfpApiUrl = environment.apiUrl
@@ -20,12 +20,12 @@ export class HeaderComponent implements OnInit{
   private auth = inject(AuthService)
   private router = inject(Router)
 
-  ngOnInit(){
+  ngOnInit() {
     this.loadUser()
   }
 
-  loadUser(){
-    if(!this.auth.isLoggedIn()){
+  loadUser() {
+    if (!this.auth.isLoggedIn()) {
       this.user = null
       return
     }
@@ -45,5 +45,9 @@ export class HeaderComponent implements OnInit{
       this.auth.logout()
 
     this.router.navigate(['/login'])
+  }
+
+  toMainPage() {
+    this.router.navigate(['/'])
   }
 }

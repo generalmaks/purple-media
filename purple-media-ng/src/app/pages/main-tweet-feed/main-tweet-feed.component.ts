@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ComposerComponent} from "../../components/composer/composer.component";
-import {TweetService} from "../../services/http/tweet.service";
+import {Tweet, TweetService} from "../../services/http/tweet.service";
 import {TweetComponent} from "../../components/tweet/tweet.component";
 
 @Component({
@@ -14,7 +14,7 @@ import {TweetComponent} from "../../components/tweet/tweet.component";
   styleUrl: './main-tweet-feed.component.css'
 })
 export class MainTweetFeedComponent implements OnInit{
-  tweets : any[] = []
+  tweets: Tweet[] = []
   private readonly pageSize = 10
   private page = 0
   private loading = false

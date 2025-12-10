@@ -1,7 +1,7 @@
 import {Component, inject, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router} from "@angular/router";
-import {Tweet} from "../../services/http/tweet.service";
+import {Tweet, TweetService} from "../../services/http/tweet.service";
 import {AttachmentService, TweetAttachment} from "../../services/http/attachment-service";
 import {environment} from "../../../environment";
 import {User, UserService} from "../../services/http/user.service";
@@ -22,8 +22,9 @@ export class TweetComponent implements OnChanges {
   user: User
   attachments: TweetAttachment[] = []
   pfpAttachment: TweetAttachment | null
-  likesAmount: number
   apiUrl = environment.apiUrl
+  likesAmount: number = 0
+  responsesAmount: number = 0
   isCurrentUserFollowingAuthorBool: boolean = false
   isCurrentUserLiked: boolean = false
 
@@ -34,6 +35,7 @@ export class TweetComponent implements OnChanges {
   private authService = inject(AuthService)
   private followService = inject(FollowService)
   private likeService = inject(LikeService)
+  private tweetService = inject(TweetService)
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.tweet) return;
@@ -76,6 +78,10 @@ export class TweetComponent implements OnChanges {
     this.router.navigate([`/user/${this.tweet.authorId}`]);
   }
 
+  toResponses() {
+    this.router.navigate([`tweet/${this.tweet.id}`])
+  }
+
   private loadTweetData() {
     combineLatest([
       this.userService.get(this.tweet.authorId),
@@ -88,6 +94,8 @@ export class TweetComponent implements OnChanges {
       this.likesAmount = likes;
 
       this.loadPfp();
+
+      this.loadResponsesCount()
 
       this.likeService.isLiked(me.id, this.tweet.id)
         .subscribe(isLiked => this.isCurrentUserLiked = isLiked);
@@ -103,5 +111,12 @@ export class TweetComponent implements OnChanges {
         next: att => this.pfpAttachment = att,
         error: err => this.pfpAttachment = null
       });
+  }
+
+  private loadResponsesCount() {
+    this.tweetService.getResponses(this.tweet.id).subscribe({
+      next: responses => this.responsesAmount = responses.length,
+      error: err => console.error('Could get responses: ' + JSON.stringify(err))
+    })
   }
 }

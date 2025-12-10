@@ -36,7 +36,7 @@
     </time>
     <nav class="response-info" aria-label="Tweet actions">
       <button (click)="likePost()">❤️{{likesAmount}}</button>
-      <button>💬 RESPONSES</button>
+      <button (click)="toResponses()">💬{{responsesAmount}}</button>
     </nav>
   </footer>
 </article>

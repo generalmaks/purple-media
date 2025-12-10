@@ -31,6 +31,10 @@ export class TweetService {
     return this.http.get<Tweet[]>(`${this.apiUrl}/from-user/${userId}`);
   }
 
+  getResponses(tweetId: number) : Observable<Tweet[]> {
+    return this.http.get<Tweet[]>(`${this.apiUrl}/responses/${tweetId}`)
+  }
+
   create(authorId: number, content: string, parentId?: number): Observable<Tweet> {
     const url = parentId
       ? `${this.apiUrl}/${authorId}/${content}/${parentId}`
