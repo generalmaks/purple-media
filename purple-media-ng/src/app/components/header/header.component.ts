@@ -24,18 +24,6 @@ export class HeaderComponent implements OnInit {
     this.loadUser()
   }
 
-  loadUser() {
-    if (!this.auth.isLoggedIn()) {
-      this.user = null
-      return
-    }
-
-    this.auth.me().subscribe({
-      next: dto => this.user = dto,
-      error: err => console.error('Could not get current users info: ' + JSON.stringify(err))
-    })
-  }
-
   isLoggedIn() {
     return this.auth.isLoggedIn()
   }
@@ -49,5 +37,26 @@ export class HeaderComponent implements OnInit {
 
   toMainPage() {
     this.router.navigate(['/'])
+  }
+
+  toChat() {
+    this.router.navigate(['/chat']); // Adjust route as needed
+  }
+
+  toYoutube() {
+    // Example external or internal link
+    window.open('https://youtube.com', '_blank');
+  }
+
+  private loadUser() {
+    if (!this.auth.isLoggedIn()) {
+      this.user = null
+      return
+    }
+
+    this.auth.me().subscribe({
+      next: dto => this.user = dto,
+      error: err => console.error('Could not get current users info: ' + JSON.stringify(err))
+    })
   }
 }

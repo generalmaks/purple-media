@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   padding: 24px;
-  max-width: 900px;
+  max-width: 600px;
   margin: 0 auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
@@ -28,8 +28,11 @@
 }
 
 .profile-pic {
-  width: 160px;
-  height: 160px;
+  width: 100%;
+  height: 100%;
+  max-width: 50%;
+  max-height: 50%;
+  aspect-ratio: 1;
   border: 3px solid #eeeeee;
 }
 
@@ -136,4 +139,32 @@
   border-radius: 2px;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .user-page {
+    padding: 12px; /* Less padding on mobile */
+  }
+
+  .profile-header {
+    flex-direction: column; /* Stack items vertically */
+    text-align: center;     /* Center text for mobile look */
+    gap: 16px;
+  }
+
+  .profile-right {
+    max-width: 100%; /* Let text use full width */
+    align-items: center; /* Center the buttons/inputs */
+  }
+
+  .first-message textarea {
+    width: 100%; /* Ensure textarea doesn't overflow */
+  }
+
+  /* Make tweets take full width on mobile */
+  .tweet-card {
+    width: 100%;
+    padding: 0; /* Remove extra padding around the component */
+    box-shadow: none; /* Cleaner look on mobile */
+  }
 }
