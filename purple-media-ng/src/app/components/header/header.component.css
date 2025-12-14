@@ -1,8 +1,7 @@
-/* --- MAIN LAYOUT --- */
 .app-header {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Pushes Left, Center, Right apart */
+  justify-content: space-between;
   padding: 12px 24px;
   background-color: #6a0dad;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -11,9 +10,8 @@
   z-index: 100;
 }
 
-/* --- LEFT: LOGO --- */
 .logo-section {
-  flex-shrink: 0; /* Prevents logo from shrinking */
+  flex-shrink: 0;
 }
 
 #logo {
@@ -26,17 +24,15 @@
 #logo:hover {
 }
 
-/* --- CENTER: NAV + SEARCH --- */
 .header-center {
   display: flex;
   align-items: center;
-  gap: 24px; /* Space between buttons and search bar */
-  flex: 1; /* Allows center to take up available space */
-  justify-content: center; /* Centers the whole block in the available space */
-  max-width: 800px; /* Prevents it from stretching too wide on huge screens */
+  gap: 24px;
+  flex: 1;
+  justify-content: center;
+  max-width: 800px;
 }
 
-/* Beautiful Nav Buttons */
 .nav-links {
   display: flex;
   gap: 8px;
@@ -50,21 +46,20 @@
   font-weight: 600;
   font-size: 15px;
   padding: 8px 16px;
-  border-radius: 20px; /* Soft pill shape */
+  border-radius: 20px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .nav-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2); /* Frosted glass effect */
+  background-color: rgba(255, 255, 255, 0.2);
   color: #fff;
 }
 
-/* Search Bar */
 .search-form {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.15); /* Semi-transparent background */
+  background: rgba(255, 255, 255, 0.15);
   padding: 4px;
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -73,7 +68,7 @@
 }
 
 .search-form:focus-within {
-  background: white; /* Becomes solid white when typing */
+  background: white;
 }
 
 .search-form input {
@@ -87,7 +82,7 @@
 }
 
 .search-form:focus-within input {
-  color: #333; /* Dark text on white background */
+  color: #333;
 }
 
 #searchButton {
@@ -103,7 +98,6 @@
   transform: scale(1.2);
 }
 
-/* --- RIGHT: USER INFO --- */
 .user-section {
   display: flex;
   align-items: center;
@@ -114,13 +108,13 @@
 .user-info {
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* Align text to the right */
+  align-items: flex-end;
   line-height: 1.2;
 }
 
 .username {
   font-weight: 700;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .pfp {
@@ -131,7 +125,6 @@
   object-fit: cover;
 }
 
-/* Small Login/Logout Button */
 .action-btn {
   background: none;
   border: none;
@@ -146,7 +139,6 @@
   color: white;
 }
 
-/* --- MOBILE RESPONSIVENESS --- */
 @media (max-width: 850px) {
   .app-header {
     flex-wrap: wrap;
@@ -155,21 +147,21 @@
   }
 
   .header-center {
-    order: 3; /* Move search/nav to bottom row */
+    order: 3;
     width: 100%;
-    flex-direction: column-reverse; /* Put search above buttons on mobile if desired, or normal column */
+    flex-direction: column-reverse;
     gap: 12px;
   }
 
   .logo-section {
-    margin-right: auto; /* Push logo left */
+    margin-right: auto;
   }
 
   .user-section {
-    margin-left: auto; /* Push user right */
+    margin-left: auto;
   }
 
   .search-form {
-    width: 100%; /* Full width search on mobile */
+    width: 100%;
   }
 }
