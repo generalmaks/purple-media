@@ -1,6 +1,7 @@
 .composer {
-  max-width: 300px;
-  min-width: 300px;
+  max-width: 600px;
+  width: 100%;
+  box-sizing: border-box;
   margin: 20px auto;
   padding: 12px;
   border: 1px solid #ccc;

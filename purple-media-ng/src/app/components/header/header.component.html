@@ -1,35 +1,40 @@
 <header class="app-header">
-  <a class="logo-link" aria-label="Home">
+
+  <a class="logo-section" aria-label="Home">
     <img (click)="toMainPage()" src="assets/logo.png" id="logo" alt="App Logo"/>
   </a>
 
-  <form class="search-form" role="search" aria-label="Site search">
-    <input
-      id="searchBar"
-      [(ngModel)]="searchQuery"
-      name="searchQuery"
-      type="search"
-      placeholder="Type to search..."
-    />
-    <button type="submit" id="searchButton">🔍</button>
-  </form>
+  <div class="header-center">
+    <nav class="nav-links">
+      <button class="nav-btn" (click)="toMainPage()">Home</button>
+      <button class="nav-btn" (click)="toChat()">Chat</button>
+      <button class="nav-btn" (click)="toYoutube()">Youtube</button>
+    </nav>
 
-  <nav id="login-controls" aria-label="User actions">
-    <div class="user-container">
+    <form class="search-form" role="search">
+      <input
+        id="searchBar"
+        [(ngModel)]="searchQuery"
+        name="searchQuery"
+        type="search"
+        placeholder="Search..."
+      />
+      <button type="submit" id="searchButton">🔍</button>
+    </form>
+  </div>
 
-      @if (user?.profilePictureUrl) {
-        <img class="pfp"
-             [src]="pfpApiUrl + user?.profilePictureUrl"
-             alt="Your profile picture">
-      }
-
-      <div class="user-info">
-        <p>{{ user ? user.username : "Not logged in" }}</p>
-        <button (click)="loginLogout()" class="button">
-          {{ user ? "Logout" : "Login" }}
-        </button>
-      </div>
-
+  <div class="user-section">
+    @if (user?.profilePictureUrl) {
+      <img class="pfp"
+           [src]="pfpApiUrl + user?.profilePictureUrl"
+           alt="Profile">
+    }
+    <div class="user-info">
+      <span class="username">{{ user ? user.username : "Guest" }}</span>
+      <button (click)="loginLogout()" class="action-btn">
+        {{ user ? "Logout" : "Login" }}
+      </button>
     </div>
-  </nav>
+  </div>
+
 </header>
