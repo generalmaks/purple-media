@@ -65,9 +65,9 @@ public class TweetService(AppDbContext db) : ITweetService
         };
 
         db.Tweets.Add(tweet);
-        var newTweetId = await db.SaveChangesAsync();
+        await db.SaveChangesAsync();
 
-        var tweetDto = new TweetDto(newTweetId, authorId, content, parentTweetId, DateTime.UtcNow);
+        var tweetDto = new TweetDto(tweet.Id, authorId, content, parentTweetId, DateTime.UtcNow);
 
         return tweetDto;
     }

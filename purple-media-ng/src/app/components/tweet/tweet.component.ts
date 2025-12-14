@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, inject, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router} from "@angular/router";
 import {Tweet, TweetService} from "../../services/http/tweet.service";
@@ -68,7 +68,6 @@ export class TweetComponent implements OnChanges {
       )
     ).subscribe();
   }
-
 
   isImage(att: TweetAttachment): boolean {
     return att.mediaType.startsWith("image/");

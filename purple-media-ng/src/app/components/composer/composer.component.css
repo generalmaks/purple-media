@@ -44,7 +44,6 @@
 .btn:hover {
   background: #0077ff;
   color: white;
-  transform: scale(1.05);
 }
 
 /* For accessibility: hides labels visually but keeps them for screen readers */

@@ -13,7 +13,7 @@ import {TweetComponent} from "../../components/tweet/tweet.component";
   templateUrl: './main-tweet-feed.component.html',
   styleUrl: './main-tweet-feed.component.css'
 })
-export class MainTweetFeedComponent implements OnInit{
+export class MainTweetFeedComponent implements OnInit {
   tweets: Tweet[] = []
   private readonly pageSize = 10
   private page = 0
@@ -25,8 +25,8 @@ export class MainTweetFeedComponent implements OnInit{
     this.loadMore()
   }
 
-  loadMore(){
-    if(this.loading) return;
+  loadMore() {
+    if (this.loading) return;
     this.loading = true
 
     this.tweetService.getLatest(this.page, this.pageSize).subscribe(tweets => {
@@ -46,5 +46,4 @@ export class MainTweetFeedComponent implements OnInit{
       this.loadMore();
     }
   }
-
 }

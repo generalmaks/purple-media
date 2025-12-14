@@ -1,4 +1,4 @@
-import {Component, inject, Input} from '@angular/core';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms'
 import {AttachmentService, TweetAttachment} from "../../services/http/attachment-service";
 import {TweetService} from "../../services/http/tweet.service";
@@ -18,6 +18,7 @@ export class ComposerComponent {
 
   @Input() isInResponse: boolean = false
   @Input() responseTweetId: number | undefined = undefined;
+  @Output() posted = new EventEmitter<void>()
 
   private tweetService = inject(TweetService)
   private attachmentService = inject(AttachmentService)
@@ -53,13 +54,13 @@ export class ComposerComponent {
                 next: () => {
                   finished++
                   if (finished === this.selectedFiles.length) {
-                    this.resetForm()
+                    this.finishPosting()
                   }
                 }, error: (err) => {
                   console.error("Attachment upload failed", err);
                   finished++;
                   if (finished === this.selectedFiles.length) {
-                    this.resetForm();
+                    this.finishPosting()
                   }
                 }
               })
@@ -74,5 +75,10 @@ export class ComposerComponent {
   resetForm() {
     this.postContent = ''
     this.selectedFiles = []
+  }
+
+  private finishPosting() {
+    this.resetForm();
+    this.posted.emit()
   }
 }

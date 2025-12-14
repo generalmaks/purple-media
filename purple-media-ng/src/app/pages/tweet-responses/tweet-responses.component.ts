@@ -24,6 +24,10 @@ export class TweetResponsesComponent implements OnInit {
   private actRoute = inject(ActivatedRoute)
 
   ngOnInit() {
+    this.loadTweets()
+  }
+
+  loadTweets() {
     let tweetId: number
 
     this.actRoute.paramMap.subscribe({
