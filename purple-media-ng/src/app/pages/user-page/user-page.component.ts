@@ -1,18 +1,20 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {User, UserService} from '../../services/http/user.service';
+import {User, UserDto, UserService} from '../../services/http/user.service';
 import {DatePipe} from '@angular/common';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Tweet, TweetService} from "../../services/http/tweet.service";
 import {TweetComponent} from "../../components/tweet/tweet.component";
 import {environment} from "../../../environment";
 import {AttachmentService, TweetAttachment} from "../../services/http/attachment-service";
 import {FollowService} from "../../services/http/follow.service";
 import {AuthService} from "../../services/http/auth.service";
+import {ChatMessageService, SendMessageDto} from "../../services/http/chat-message.service";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-user-page',
   standalone: true,
-  imports: [DatePipe, TweetComponent],
+  imports: [DatePipe, TweetComponent, FormsModule],
   templateUrl: './user-page.component.html',
   styleUrl: './user-page.component.css'
 })
@@ -24,13 +26,16 @@ export class UserPageComponent implements OnInit {
   pfpAttachment: TweetAttachment | null;
   isCurrentUserFollowing: boolean
   currentUserId: number
-
+  alreadyHasChat: boolean = true
+  firstMessageContent: string = ''
   private userService = inject(UserService)
   private activatedRoute = inject(ActivatedRoute)
   private tweetService = inject(TweetService)
   private attachmentService = inject(AttachmentService)
   private authService = inject(AuthService)
   private followService = inject(FollowService)
+  private messageService = inject(ChatMessageService)
+  private router = inject(Router)
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -54,7 +59,7 @@ export class UserPageComponent implements OnInit {
   }
 
   follow() {
-    if(this.isCurrentUserFollowing){
+    if (this.isCurrentUserFollowing) {
       this.followService.unfollow(this.currentUserId, this.userId).subscribe({
         next: () => this.isCurrentUserFollowing = false,
         error: err => console.error('Could not unfollow user: ' + JSON.stringify(err))
@@ -65,6 +70,33 @@ export class UserPageComponent implements OnInit {
         error: err => console.error('Could not follow user: ' + JSON.stringify(err))
       })
     }
+  }
+
+  sendMessage() {
+    if (!this.currentUserId) return
+
+    this.messageService.getMessagesFromChatAsync(this.currentUserId, this.userId, 1, 1).subscribe({
+      next: lastMessage => {
+        if (lastMessage.toString() == '') {
+          this.alreadyHasChat = false
+        } else {
+          this.alreadyHasChat = true
+          this.router.navigate(['/chat'])
+        }
+      }, error: err => console.error('Could not get last message: ' + JSON.stringify(err))
+    })
+  }
+
+  sendFirstMessage() {
+    let sendMessageDto: SendMessageDto = {
+      senderId: this.currentUserId,
+      receiverId: this.userId,
+      content: this.firstMessageContent
+    }
+    this.messageService.sendMessage(sendMessageDto).subscribe({
+      next: () => this.router.navigate(['/chat']),
+      error: err => console.error('Could not send first message: ' + JSON.stringify(err))
+    })
   }
 
   private loadUser() {

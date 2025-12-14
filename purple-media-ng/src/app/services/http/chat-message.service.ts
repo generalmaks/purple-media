@@ -53,6 +53,10 @@ export class ChatMessageService {
     return this.http.get<ChatInfo[]>(`${this.apiUrl}/chats-info`, {headers: this.getAuthHeaders()})
   }
 
+  sendMessage(dto: SendMessageDto) {
+    return this.http.post<ChatMessage>(`${this.apiUrl}`, dto)
+  }
+
   deleteMessage(id: number
   ) {
     return this.http.delete(`${this.apiUrl}/${id}`)

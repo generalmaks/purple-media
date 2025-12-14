@@ -1,15 +1,27 @@
 <main class="user-page">
   <header class="profile-header">
     <img [src]="pfpAttachment ? apiUrl + pfpAttachment.url : 'assets/default-pfp.jpg'" alt="PFP" class="profile-pic"/>
-    <div class="user-info">
-      <h1>{{ user.username }}</h1>
-      <p class="join-date">Joined: {{ user.createdAt | date : "medium" }}</p>
-      <p id="user-bio">{{ user.bio }}</p>
-      @if (currentUserId != userId) {
-        <button class="follow-button" (click)="follow()">{{ isCurrentUserFollowing ? "Following" : "Follow" }}</button>
-      }
+
+    <div class="profile-right">
+      <div class="user-info">
+        <h1>{{ user.username }}</h1>
+        <p class="join-date">Joined: {{ user.createdAt | date : "medium" }}</p>
+        <p id="user-bio">{{ user.bio }}</p>
+        @if (currentUserId != userId) {
+          <button class="follow-button" (click)="follow()">{{ isCurrentUserFollowing ? "Following" : "Follow" }}
+          </button>
+          <button class="follow-button" (click)="sendMessage()">Message</button>
+        }
+        @if (!alreadyHasChat) {
+          <div class="first-message">
+            <textarea placeholder="What's up?" [(ngModel)]="firstMessageContent"></textarea>
+            <button (click)="sendFirstMessage()">Send</button>
+          </div>
+        }
+      </div>
     </div>
   </header>
+
 
   <section class="user-tweets">
     <p class="tweets-by-user">Tweets by {{ user.username }}</p>
