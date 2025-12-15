@@ -53,6 +53,43 @@ public class AttachmentService(AppDbContext db) : IAttachmentService
         return attachment;
     }
 
+    public async Task<TweetAttachment> AddPfpAsync(int userPfpId, FileUploadDto fileUpload)
+    {
+        if (fileUpload.FileStream is null || fileUpload.FileSize == 0)
+            throw new ArgumentException("No file provided");
+        if (fileUpload.FileSize > MaxFileSize)
+            throw new ArgumentException($"File size exceeds maximum allowed size of {MaxFileSize / 1024 / 1024}MB.");
+        if (!fileUpload.ContentType.StartsWith("image/"))
+            throw new ArgumentException("You can only upload images as users profile picture");
+        
+        var extension = Path.GetExtension(fileUpload.FileName).ToLowerInvariant();
+        var fileName = $"{fileUpload.FileName}-{Guid.NewGuid()}{extension}";
+
+        byte[] fileData;
+        using (var ms = new MemoryStream())
+        {
+            await fileUpload.FileStream.CopyToAsync(ms);
+            fileData = ms.ToArray();
+        }
+
+        var attachment = new TweetAttachment
+        {
+            TweetId = null,
+            UserPfpId = userPfpId,
+            Data = fileData,
+            MediaType = fileUpload.ContentType,
+            FileName = fileName
+        };
+
+        var alreadyExistingUsersPfp = await db.Attachments.FirstOrDefaultAsync(a => a.UserPfpId == userPfpId);
+        if (alreadyExistingUsersPfp is not null)
+            db.Attachments.Remove(alreadyExistingUsersPfp);
+        await db.Attachments.AddAsync(attachment);
+        await db.SaveChangesAsync();
+
+        return attachment;
+    }
+
     public async Task<IEnumerable<TweetAttachment>> GetForTweetAsync(int tweetId) =>
         await Task.FromResult<IEnumerable<TweetAttachment>>(
             db.Attachments.Where(a => a.TweetId == tweetId)

@@ -13,7 +13,6 @@ public interface IChatService
         int pageSize);
 
     Task<IEnumerable<ChatInfoDto>> GetChatsInfo(int userId);
-    Task MarkAsReadAsync(long messageId);
 
     Task<ChatMessage> SendMessageAsync(int senderId, int receiverId, string content);
     Task DeleteMessageAsync(long messageId);

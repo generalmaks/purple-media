@@ -31,6 +31,25 @@ public class AttachmentController(IAttachmentService service) : ControllerBase
         }
     }
 
+    [HttpPost("pfp")]
+    public async Task<ActionResult<GetAttachmentDto>> CreatePfp([FromForm] PfpCreateRequest request)
+    {
+        try
+        {
+            await service.AddPfpAsync(request.UserId,
+                new FileUploadDto(
+                    request.File.OpenReadStream(),
+                    request.File.FileName,
+                    request.File.ContentType,
+                    request.File.Length));
+            return Created();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
     [HttpGet("{tweetId:int}")]
     public async Task<ActionResult<IEnumerable<GetAttachmentDto>>> GetForTweetAsync(int tweetId)
     {
