@@ -59,4 +59,12 @@ export class HeaderComponent implements OnInit {
       error: err => console.error('Could not get current users info: ' + JSON.stringify(err))
     })
   }
+
+  toMyPage() {
+    this.auth.me().subscribe({
+      next: userDto => {
+        this.router.navigate([`user/${userDto.id}`])
+      }, error: err => console.error('Cant determine current user: ' + JSON.stringify(err))
+    })
+  }
 }
