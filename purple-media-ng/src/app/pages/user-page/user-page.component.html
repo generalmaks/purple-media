@@ -4,7 +4,7 @@
 
     <div class="profile-right">
       <div class="user-info">
-        <h1>{{ user.username }}</h1>
+        <h1>{{ user.displayName }}</h1>
         <p class="join-date">Joined: {{ user.createdAt | date : "medium" }}</p>
         <p id="user-bio">{{ user.bio }}</p>
         @if (currentUserId != userId) {

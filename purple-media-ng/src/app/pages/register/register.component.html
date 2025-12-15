@@ -12,6 +12,19 @@
 
     <button type="submit">Register</button>
   </form>
+  <button type="button" (click)="fileInput.click()">Select profile picture</button>
+  <input
+    type="file"
+    accept="image/*"
+    hidden
+    #fileInput
+    (change)="onFileSelected($event)"
+  >
+
+  <p *ngIf="selectedFile">
+    Selected: {{ selectedFile?.name }}
+  </p>
+
   <h3>Already have an account?</h3>
   <button (click)="toLoginPage()" id="toRegister">Login</button>
 </div>

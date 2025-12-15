@@ -25,6 +25,14 @@ export class AttachmentService {
     return this.http.post<TweetAttachment>(this.apiUrl, formData);
   }
 
+  createPfp(userId: number, file: File): Observable<TweetAttachment> {
+    const formData= new FormData();
+    formData.append('userId', userId.toString())
+    formData.append('file', file)
+
+    return this.http.post<TweetAttachment>(`${this.apiUrl}/pfp`, formData)
+  }
+
   getForTweet(tweetId: number): Observable<TweetAttachment[]> {
     return this.http.get<TweetAttachment[]>(`${this.apiUrl}/${tweetId}`);
   }
