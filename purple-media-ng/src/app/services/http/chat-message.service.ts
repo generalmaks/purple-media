@@ -43,8 +43,8 @@ export class ChatMessageService {
     currentUserId: number,
     otherUserId: number,
     page: number,
-    pageSize: number) {
-    return this.http.get(
+    pageSize: number): Observable<ChatMessage[]> {
+    return this.http.get<ChatMessage[]>(
       `${this.apiUrl}/thread/${currentUserId}/${otherUserId}/${page}/${pageSize}`
     )
   }

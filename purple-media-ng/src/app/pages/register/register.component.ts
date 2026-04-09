@@ -4,11 +4,7 @@ import {Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {AttachmentService} from "../../services/http/attachment-service";
 import {NgIf} from "@angular/common";
-
-export interface CreatePfpDto {
-  userId: number,
-  pfpFile: File
-}
+import {of, switchMap} from "rxjs";
 
 @Component({
   selector: 'app-register',
@@ -19,7 +15,6 @@ export interface CreatePfpDto {
 })
 export class RegisterComponent {
   selectedFile: File | null = null;
-  pfpDto!: CreatePfpDto;
 
   login = model<RegisterDto>({
     username: '',
@@ -33,30 +28,25 @@ export class RegisterComponent {
 
   submit() {
     const registerDto = this.login();
+    const loginDto: LoginDto = {
+      username: registerDto.username,
+      unhashedPassword: registerDto.unhashedPassword
+    };
 
-    this.auth.register(registerDto).subscribe(() => {
-      const loginDto: LoginDto = {
-        username: registerDto.username,
-        unhashedPassword: registerDto.unhashedPassword
-      }
+    this.auth.register(registerDto).pipe(
+      switchMap(() => this.auth.login(loginDto)),
+      switchMap(() => this.selectedFile ? this.auth.me() : of(null)),
+      switchMap(userDto => {
+        if (!userDto || !this.selectedFile) {
+          return of(null);
+        }
 
-      this.auth.login(loginDto).subscribe({
-        next: () => {
-          this.auth.me().subscribe({
-            next: userDto => {
-              if (this.selectedFile === null) {
-                console.log("Registered")
-                this.toLoginPage()
-                return
-              }
-              this.attService.createPfp(userDto.id, this.selectedFile!).subscribe({
-                error: err => console.error('Cant create pfp: ' + JSON.stringify(err))
-              })
-            }
-          })
-        }, error: err => console.error('Cant log in: ' + JSON.stringify(err))
+        return this.attService.createPfp(userDto.id, this.selectedFile);
       })
-    }, err => console.error('Cant register account: ' + JSON.stringify(err)))
+    ).subscribe({
+      next: () => this.toLoginPage(),
+      error: err => console.error('Could not register account: ' + JSON.stringify(err))
+    });
   }
 
   toLoginPage() {
@@ -64,17 +54,12 @@ export class RegisterComponent {
   }
 
   onFileSelected($event: Event) {
-    if (event === null || event === undefined) return;
+    const input = $event.target as HTMLInputElement | null;
 
-    const input = event.target as HTMLInputElement;
-
-    if (!input.files || input.files.length === 0) {
+    if (!input?.files || input.files.length === 0) {
       return;
     }
 
     this.selectedFile = input.files[0];
-
-
-    console.log('Selected file:', this.selectedFile);
   }
 }

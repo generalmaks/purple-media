@@ -8,11 +8,10 @@
     <nav class="nav-links">
       <button class="nav-btn" (click)="toMainPage()">Home</button>
       <button class="nav-btn" (click)="toChat()">Chat</button>
-      <button class="nav-btn" (click)="toYoutube()">Youtube</button>
       <button class="nav-btn" (click)="toMyPage()">Me</button>
     </nav>
 
-    <form class="search-form" role="search">
+    <form class="search-form" role="search" (ngSubmit)="onSearch()">
       <input
         id="searchBar"
         [(ngModel)]="searchQuery"
@@ -20,7 +19,7 @@
         type="search"
         placeholder="Search..."
       />
-      <button type="submit" id="searchButton">🔍</button>
+      <button type="submit" id="searchButton" aria-label="Search">Search</button>
     </form>
   </div>
 

@@ -17,7 +17,7 @@ import {ComposerComponent} from "../../components/composer/composer.component";
   styleUrl: './tweet-responses.component.css'
 })
 export class TweetResponsesComponent implements OnInit {
-  mainTweet: Tweet;
+  mainTweet: Tweet | null = null;
   responses: Tweet[] = [];
 
   private tweetService = inject(TweetService)
@@ -36,7 +36,7 @@ export class TweetResponsesComponent implements OnInit {
 
         this.tweetService.get(tweetId).subscribe({
           next: tweet => {
-            this.mainTweet = tweet!
+            this.mainTweet = tweet
           },
           error: err => console.error('Could not retrieve main tweet: ' + JSON.stringify(err))
         })

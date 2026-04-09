@@ -1,8 +1,10 @@
-<app-tweet [tweet]="mainTweet"></app-tweet>
-<app-composer
-  [isInResponse]="true"
-  [responseTweetId]="mainTweet?.id"
-  (posted)="loadTweets()"></app-composer>
+@if (mainTweet; as tweet) {
+  <app-tweet [tweet]="tweet"></app-tweet>
+  <app-composer
+    [isInResponse]="true"
+    [responseTweetId]="tweet.id"
+    (posted)="loadTweets()"></app-composer>
+}
 @for (response of responses; track response.id) {
   <app-tweet [tweet]="response"></app-tweet>
 }

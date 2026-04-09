@@ -19,11 +19,11 @@ import {CommonModule, NgForOf, NgIf} from "@angular/common";
   styleUrl: './chat-page.component.css'
 })
 export class ChatPageComponent implements OnInit {
-  currentUser: UserDto
-  chats: ChatInfo[]
-  selectedChat: ChatInfo | null = null!
+  currentUser: UserDto | null = null
+  chats: ChatInfo[] = []
+  selectedChat: ChatInfo | null = null
 
-  selectedChatMessages: ChatMessage[]
+  selectedChatMessages: ChatMessage[] = []
   newMessage: string = ''
 
   readonly pageSize = 10
@@ -42,7 +42,7 @@ export class ChatPageComponent implements OnInit {
     this.chatHub.startConnection(this.authService.getToken()!)
 
     this.chatHub.messages$.subscribe(msg => {
-      if (!msg) return
+      if (!msg || !this.currentUser) return
 
       if (this.selectedChat && this.selectedChat.otherUserId === Number(msg.sender)) {
         this.selectedChatMessages.push({
@@ -63,7 +63,7 @@ export class ChatPageComponent implements OnInit {
   }
 
   send() {
-    if (!this.selectedChat || !this.newMessage.trim()) return;
+    if (!this.selectedChat || !this.currentUser || !this.newMessage.trim()) return;
 
     const otherUserId = this.selectedChat.otherUserId;
     const text = this.newMessage;
@@ -74,7 +74,7 @@ export class ChatPageComponent implements OnInit {
       content: this.newMessage,
       id: 0,
       isRead: false,
-      messageSent: Date.now().toString(),
+      messageSent: new Date().toISOString(),
       receiverId: this.selectedChat.otherUserId,
       senderId: this.currentUser.id
 
@@ -96,9 +96,13 @@ export class ChatPageComponent implements OnInit {
   }
 
   private loadMessages(otherUserId: number) {
+    if (!this.currentUser) {
+      return;
+    }
+
     this.chatMessages
       .getMessagesFromChatAsync(this.currentUser.id, otherUserId, 1, this.pageSize)
-      .subscribe((msg: any) => {
+      .subscribe((msg: ChatMessage[]) => {
         this.selectedChatMessages = msg.reverse()
       })
   }

@@ -26,14 +26,14 @@
 
     @if (selectedChat) {
       <header class="chat-header">
-        <button class="back-btn" (click)="closeChat()">←</button>
+        <button class="back-btn" (click)="closeChat()" aria-label="Back">Back</button>
         <h3>{{ selectedChat.otherUserUsername }}</h3>
       </header>
 
       <div class="messages-viewport">
         @for (msg of selectedChatMessages; track msg.id) {
           <div class="message-row"
-               [class.my-message]="msg.senderId === currentUser.id">
+               [class.my-message]="msg.senderId === currentUser?.id">
             <div class="message-bubble">
               <div class="message-text">{{ msg.content }}</div>
               <div class="message-time">{{ msg.messageSent | date:'HH:mm' }}</div>
@@ -47,7 +47,7 @@
                (keydown.enter)="send()"
                placeholder="Type a message..."
                type="text"/>
-        <button (click)="send()" [disabled]="!newMessage.trim()">➤</button>
+        <button (click)="send()" [disabled]="!newMessage.trim()" aria-label="Send">Send</button>
       </footer>
     }
     @else {

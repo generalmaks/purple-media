@@ -1,9 +1,10 @@
 import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
-import {FormsModule, NgForm} from '@angular/forms'
-import {AttachmentService, TweetAttachment} from "../../services/http/attachment-service";
+import {FormsModule} from '@angular/forms'
+import {AttachmentService} from "../../services/http/attachment-service";
 import {TweetService} from "../../services/http/tweet.service";
 import {AuthService} from "../../services/http/auth.service";
 import {NgForOf, NgIf} from "@angular/common";
+import {catchError, forkJoin, of, switchMap} from "rxjs";
 
 @Component({
   selector: 'app-composer',
@@ -14,7 +15,8 @@ import {NgForOf, NgIf} from "@angular/common";
 })
 export class ComposerComponent {
   postContent: string = ''
-  selectedFiles: File[]
+  selectedFiles: File[] = []
+  isSubmitting: boolean = false
 
   @Input() isInResponse: boolean = false
   @Input() responseTweetId: number | undefined = undefined;
@@ -33,43 +35,35 @@ export class ComposerComponent {
   }
 
   submitPost() {
-    if (!this.postContent.trim()) return;
+    if (!this.postContent.trim() || this.isSubmitting) return;
 
-    let currentUserId: number
-    this.authService.me().subscribe({
-      next: dto => {
-        currentUserId = dto.id
+    this.isSubmitting = true;
 
-        this.tweetService.create(currentUserId, this.postContent, this.responseTweetId).subscribe({
-          next: createdTweet => {
-            if (this.selectedFiles.length === 0) {
-              this.resetForm()
-              return
-            }
+    this.authService.me().pipe(
+      switchMap(dto => this.tweetService.create(dto.id, this.postContent, this.responseTweetId)),
+      switchMap(createdTweet => {
+        if (this.selectedFiles.length === 0) {
+          return of(createdTweet);
+        }
 
-            let finished = 0
-
-            for (const file of this.selectedFiles) {
-              this.attachmentService.create(createdTweet.id, file).subscribe({
-                next: () => {
-                  finished++
-                  if (finished === this.selectedFiles.length) {
-                    this.finishPosting()
-                  }
-                }, error: (err) => {
-                  console.error("Attachment upload failed", err);
-                  finished++;
-                  if (finished === this.selectedFiles.length) {
-                    this.finishPosting()
-                  }
-                }
+        return forkJoin(
+          this.selectedFiles.map(file =>
+            this.attachmentService.create(createdTweet.id, file).pipe(
+              catchError(err => {
+                console.error('Attachment upload failed', err);
+                return of(null);
               })
-            }
-          }, error: err => console.error('Could not create tweet: ' + JSON.stringify(err))
-        })
-      },
-      error: err => console.error('Could not determine current user: ' + JSON.stringify(err))
-    })
+            )
+          )
+        );
+      })
+    ).subscribe({
+      next: () => this.finishPosting(),
+      error: err => {
+        this.isSubmitting = false;
+        console.error('Could not create post: ' + JSON.stringify(err));
+      }
+    });
   }
 
   resetForm() {
@@ -78,6 +72,7 @@ export class ComposerComponent {
   }
 
   private finishPosting() {
+    this.isSubmitting = false;
     this.resetForm();
     this.posted.emit()
   }

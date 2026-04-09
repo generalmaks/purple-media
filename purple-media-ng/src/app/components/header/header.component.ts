@@ -40,12 +40,16 @@ export class HeaderComponent implements OnInit {
   }
 
   toChat() {
-    this.router.navigate(['/chat']); // Adjust route as needed
+    this.router.navigate(['/chat']);
   }
 
-  toYoutube() {
-    // Example external or internal link
-    window.open('https://youtube.com', '_blank');
+  onSearch() {
+    const query = this.searchQuery.trim();
+    if (!query) {
+      return;
+    }
+
+    this.router.navigate(['/search', query]);
   }
 
   private loadUser() {
@@ -61,6 +65,11 @@ export class HeaderComponent implements OnInit {
   }
 
   toMyPage() {
+    if (!this.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.auth.me().subscribe({
       next: userDto => {
         this.router.navigate([`user/${userDto.id}`])

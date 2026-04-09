@@ -18,10 +18,10 @@ import {combineLatest, switchMap, tap} from "rxjs";
   styleUrl: './tweet.component.css'
 })
 export class TweetComponent implements OnChanges {
-  @Input() tweet: Tweet
-  user: User
+  @Input({required: true}) tweet!: Tweet
+  user: User | null = null
   attachments: TweetAttachment[] = []
-  pfpAttachment: TweetAttachment | null
+  pfpAttachment: TweetAttachment | null = null
   apiUrl = environment.apiUrl
   likesAmount: number = 0
   responsesAmount: number = 0
@@ -88,7 +88,7 @@ export class TweetComponent implements OnChanges {
       this.likeService.countLikes(this.tweet.id),
       this.authService.me(),
     ]).subscribe(([user, attachments, likes, me]) => {
-      this.user = user!;
+      this.user = user ?? null;
       this.attachments = attachments;
       this.likesAmount = likes;
 
@@ -99,8 +99,10 @@ export class TweetComponent implements OnChanges {
       this.likeService.isLiked(me.id, this.tweet.id)
         .subscribe(isLiked => this.isCurrentUserLiked = isLiked);
 
-      this.followService.isFollowing(me.id, user!.id)
-        .subscribe(isFollowing => this.isCurrentUserFollowingAuthorBool = isFollowing);
+      if (user) {
+        this.followService.isFollowing(me.id, user.id)
+          .subscribe(isFollowing => this.isCurrentUserFollowingAuthorBool = isFollowing);
+      }
     });
   }
 
